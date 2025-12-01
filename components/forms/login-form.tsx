@@ -25,6 +25,7 @@ function LoginForm() {
   };
 
   const handleSubmit = async (data: z.infer<typeof loginformSchema>) => {
+    console.log("data", data);
     await loginApiMethod(data);
   };
   return (
@@ -52,7 +53,12 @@ function LoginForm() {
             forgot password?
           </Button>
         </div>
-        <Button type="submit" variant="default" className="w-full mt-2 p-6">
+        <Button
+          type="submit"
+          variant="default"
+          onClick={form.handleSubmit(handleSubmit)}
+          className="w-full mt-2 p-6"
+        >
           Login
         </Button>
       </form>
