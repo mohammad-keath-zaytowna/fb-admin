@@ -1,8 +1,14 @@
+"use client";
 import ForgotPasswordForm from "@/components/forms/forgot-password-form";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { useRouter } from "next/navigation";
 
 function ForgotPasswordPage() {
+  const router = useRouter();
+  const handleBackToLogin = () => {
+    router.push("/login");
+  };
   return (
     <section className="flex h-full min-h-screen justify-center items-center">
       <div className="flex flex-col gap-3 max-w-xl">
@@ -17,7 +23,12 @@ function ForgotPasswordPage() {
           <ForgotPasswordForm />
         </Card>
         <div className="flex justify-center">
-          <Button type="submit" variant="link" className=" p-2">
+          <Button
+            onClick={handleBackToLogin}
+            type="button"
+            variant="link"
+            className=" p-2"
+          >
             Back to Login
           </Button>
         </div>

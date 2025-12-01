@@ -6,6 +6,8 @@ import { FormProvider, useForm } from "react-hook-form";
 import * as z from "zod";
 import RHFInput from "../react-hook-form/rhf-input";
 import { Button } from "../ui/button";
+import { useRouter } from "next/navigation";
+import { loginApiMethod } from "@/lib/api/auth";
 
 function LoginForm() {
   const form = useForm<z.infer<typeof loginformSchema>>({
@@ -16,9 +18,18 @@ function LoginForm() {
     },
     mode: "onChange",
   });
+
+  const router = useRouter();
+  const handleForgotPassword = () => {
+    router.push("/forgot-password");
+  };
+
+  const handleSubmit = async (data: z.infer<typeof loginformSchema>) => {
+    await loginApiMethod(data);
+  };
   return (
     <FormProvider {...form}>
-      <form className="space-y-4">
+      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
         <RHFInput
           name="email"
           label="Email"
@@ -32,7 +43,12 @@ function LoginForm() {
           placeholder="••••••••"
         />
         <div className="flex justify-end">
-          <Button type="submit" variant="link" className=" p-2">
+          <Button
+            onClick={handleForgotPassword}
+            type="button"
+            variant="link"
+            className="p-2"
+          >
             forgot password?
           </Button>
         </div>
