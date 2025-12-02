@@ -2,7 +2,8 @@ import { ApiError } from "@/types/api";
 import axios, { AxiosInstance, AxiosResponse } from "axios";
 
 // API Configuration
-export const API_BASE_URL = process.env.BACKEND_URL;
+export const API_BASE_URL =
+  process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5000/api";
 
 // Create axios instance
 const apiClient: AxiosInstance = axios.create({
@@ -22,6 +23,10 @@ apiClient.interceptors.request.use(
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }
+      // Don't set Content-Type for FormData, let browser set it with boundary
+      if (config.data instanceof FormData) {
+        delete config.headers["Content-Type"];
+      }
     } catch (error) {
       console.error("Error getting auth token:", error);
     }
@@ -39,6 +44,19 @@ apiClient.interceptors.response.use(
   },
   (error) => {
     if (error.response) {
+      // Handle 401 Unauthorized - redirect to login
+      if (error.response.status === 401) {
+        // Clear auth data
+        localStorage.removeItem("@auth_user");
+        localStorage.removeItem("@auth_token");
+        localStorage.removeItem("@auth_refresh_token");
+        
+        // Redirect to login if we're in the browser
+        if (typeof window !== "undefined") {
+          window.location.href = "/login";
+        }
+      }
+      
       // Server responded with error status
       const apiError: ApiError = {
         message: error.response.data?.message || "An error occurred",

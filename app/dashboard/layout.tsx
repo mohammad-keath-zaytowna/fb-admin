@@ -1,0 +1,33 @@
+"use client";
+import { AppSidebar } from "@/components/app-sidebar";
+import { SiteHeader } from "@/components/site-header";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { AuthGuard } from "@/components/auth-guard";
+import React from "react";
+
+function DashboardLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <AuthGuard>
+      <SidebarProvider
+        style={
+          {
+            "--sidebar-width": "calc(var(--spacing) * 72)",
+            "--header-height": "calc(var(--spacing) * 12)",
+          } as React.CSSProperties
+        }
+      >
+        <AppSidebar variant="inset" />
+        <SidebarInset>
+          <SiteHeader />
+          {children}
+        </SidebarInset>
+      </SidebarProvider>
+    </AuthGuard>
+  );
+}
+
+export default DashboardLayout;

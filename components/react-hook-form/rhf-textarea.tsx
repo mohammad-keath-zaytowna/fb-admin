@@ -1,22 +1,22 @@
 import { Controller, useFormContext } from "react-hook-form";
-import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
 import { Field, FieldError, FieldLabel } from "../ui/field";
 
-interface RHFInputProps {
+interface RHFTextareaProps {
   disabled?: boolean;
   name: string;
   label: string;
   placeholder?: string;
-  type?: "email" | "password" | "text" | "number";
+  rows?: number;
 }
 
-function RHFInput({
+function RHFTextarea({
   disabled,
   name,
   label,
   placeholder,
-  type = "text",
-}: RHFInputProps) {
+  rows = 4,
+}: RHFTextareaProps) {
   const { control } = useFormContext();
 
   return (
@@ -26,12 +26,12 @@ function RHFInput({
       render={({ field, fieldState }) => (
         <Field data-invalid={fieldState.invalid}>
           <FieldLabel htmlFor={name}>{label}</FieldLabel>
-          <Input
+          <Textarea
             {...field}
             disabled={disabled}
             id={name}
-            type={type}
             placeholder={placeholder}
+            rows={rows}
             aria-invalid={fieldState.invalid}
           />
 
@@ -42,4 +42,5 @@ function RHFInput({
   );
 }
 
-export default RHFInput;
+export default RHFTextarea;
+

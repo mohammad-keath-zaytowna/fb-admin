@@ -1,6 +1,16 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  .print-card {
+    box-shadow: none !important;
+    border: none !important;
+  }
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {

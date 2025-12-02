@@ -9,11 +9,23 @@ export const loginApiMethod = async ({
   password: string;
 }) => {
   try {
-    const { data } = await apiClient.post("/login", { email, password });
-    toast("created successfully");
-    return data;
+    const { data } = await apiClient.post("/auth/login", { email, password });
+    
+    // Store access token
+    if (data?.data?.accessToken) {
+      localStorage.setItem("@auth_token", data.data.accessToken);
+    }
+    
+    // Store refresh token if provided
+    if (data?.data?.refreshToken) {
+      localStorage.setItem("@auth_refresh_token", data.data.refreshToken);
+    }
+    
+    toast.success(data?.message || "Login successful");
+    return data?.data;
     // eslint-disable-next-line
   } catch (error: any) {
-    toast.error(error.message ?? "creation failed");
+    toast.error(error?.response?.data?.message || error?.message || "Login failed");
+    throw error;
   }
 };
