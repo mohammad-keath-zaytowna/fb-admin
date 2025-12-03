@@ -19,9 +19,12 @@ const apiClient: AxiosInstance = axios.create({
 apiClient.interceptors.request.use(
   async (config) => {
     try {
-      const token = localStorage.getItem("@auth_token");
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
+      // Only access localStorage on the client side
+      if (typeof window !== "undefined") {
+        const token = localStorage.getItem("@auth_token");
+        if (token) {
+          config.headers.Authorization = `Bearer ${token}`;
+        }
       }
       // Don't set Content-Type for FormData, let browser set it with boundary
       if (config.data instanceof FormData) {

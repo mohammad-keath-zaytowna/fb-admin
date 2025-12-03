@@ -12,12 +12,12 @@ export const loginApiMethod = async ({
     const { data } = await apiClient.post("/auth/login", { email, password });
     
     // Store access token
-    if (data?.data?.accessToken) {
+    if (data?.data?.accessToken && typeof window !== "undefined") {
       localStorage.setItem("@auth_token", data.data.accessToken);
     }
     
     // Store refresh token if provided
-    if (data?.data?.refreshToken) {
+    if (data?.data?.refreshToken && typeof window !== "undefined") {
       localStorage.setItem("@auth_refresh_token", data.data.refreshToken);
     }
     

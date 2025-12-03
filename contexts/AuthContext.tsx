@@ -36,6 +36,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   });
 
   const loadStoredAuth = useCallback(async () => {
+    // Only access localStorage on the client side
+    if (typeof window === "undefined") {
+      setAuthState({
+        user: null,
+        isLoading: false,
+        isAuthenticated: false,
+      });
+      return;
+    }
+
     try {
       const storedUser = localStorage.getItem("@auth_user");
       const storedToken = localStorage.getItem("@auth_token");
@@ -60,9 +70,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       }
     } catch (error) {
       console.error("Error loading stored auth:", error);
-      localStorage.removeItem("@auth_user");
-      localStorage.removeItem("@auth_token");
-      localStorage.removeItem("@auth_refresh_token");
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("@auth_user");
+        localStorage.removeItem("@auth_token");
+        localStorage.removeItem("@auth_refresh_token");
+      }
       setAuthState({
         user: null,
         isLoading: false,
@@ -81,14 +93,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       const { user, accessToken, refreshToken } = loginData;
       
-      localStorage.setItem("@auth_user", JSON.stringify(user));
-      
-      if (accessToken) {
-        localStorage.setItem("@auth_token", accessToken);
-      }
-      
-      if (refreshToken) {
-        localStorage.setItem("@auth_refresh_token", refreshToken);
+      if (typeof window !== "undefined") {
+        localStorage.setItem("@auth_user", JSON.stringify(user));
+        
+        if (accessToken) {
+          localStorage.setItem("@auth_token", accessToken);
+        }
+        
+        if (refreshToken) {
+          localStorage.setItem("@auth_refresh_token", refreshToken);
+        }
       }
       
       setAuthState({
@@ -104,9 +118,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const logout = async () => {
     try {
-      localStorage.removeItem("@auth_user");
-      localStorage.removeItem("@auth_token");
-      localStorage.removeItem("@auth_refresh_token");
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("@auth_user");
+        localStorage.removeItem("@auth_token");
+        localStorage.removeItem("@auth_refresh_token");
+      }
 
       setAuthState({
         user: null,
@@ -121,7 +137,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const updateUser = async (updatedUser: User) => {
     try {
-      localStorage.setItem("@auth_user", JSON.stringify(updatedUser));
+      if (typeof window !== "undefined") {
+        localStorage.setItem("@auth_user", JSON.stringify(updatedUser));
+      }
       setAuthState((prev) => ({
         ...prev,
         user: updatedUser,
