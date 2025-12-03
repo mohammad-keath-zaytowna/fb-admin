@@ -7,6 +7,7 @@ export type User = {
   createdAt?: string;
   updatedAt?: string;
   image?: string;
+  maxManagedUsers?: number;
 };
 
 export type AuthState = {

@@ -91,23 +91,6 @@ export const columns: ColumnDef<Product>[] = [
 ]
 
 // Add edit link to product name
-export const columnsWithEdit: ColumnDef<Product>[] = [
-  ...columns.slice(0, 2),
-  {
-    accessorKey: "name",
-    header: "Name",
-    cell: ({ row }) => {
-      return (
-        <a
-          href={`/dashboard/products/${row.original._id}`}
-          className="text-primary hover:underline"
-        >
-          {row.original.name}
-        </a>
-      );
-    },
-  },
-  ...columns.slice(2),
-]
+export const columnsWithEdit: ColumnDef<Product>[] = columns
 
 

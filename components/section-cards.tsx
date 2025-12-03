@@ -1,4 +1,6 @@
-import { IconTrendingDown, IconTrendingUp } from "@tabler/icons-react"
+"use client";
+
+import { IconTrendingDown, IconTrendingUp, IconUsers, IconShoppingCart, IconPackage } from "@tabler/icons-react"
 
 import { Badge } from "@/components/ui/badge"
 import {
@@ -9,92 +11,119 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { DashboardStats } from "@/lib/api/stats"
 
-export function SectionCards() {
+interface SectionCardsProps {
+  stats: DashboardStats | null;
+  isLoading?: boolean;
+}
+
+export function SectionCards({ stats, isLoading = false }: SectionCardsProps) {
+  if (isLoading) {
+    return (
+      <div className="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4">
+        {[1, 2, 3, 4].map((i) => (
+          <Card key={i} className="@container/card">
+            <CardHeader>
+              <CardDescription className="h-4 w-24 bg-muted animate-pulse rounded" />
+              <CardTitle className="h-8 w-32 bg-muted animate-pulse rounded mt-2" />
+            </CardHeader>
+          </Card>
+        ))}
+      </div>
+    );
+  }
+
   return (
     <div className="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4">
       <Card className="@container/card">
         <CardHeader>
-          <CardDescription>Total Revenue</CardDescription>
+          <CardDescription>Total Users</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            $1,250.00
+            {stats?.totalUsers ?? 0}
           </CardTitle>
           <CardAction>
             <Badge variant="outline">
-              <IconTrendingUp />
-              +12.5%
+              <IconUsers className="size-3" />
             </Badge>
           </CardAction>
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1.5 text-sm">
           <div className="line-clamp-1 flex gap-2 font-medium">
-            Trending up this month <IconTrendingUp className="size-4" />
+            {stats?.activeUsers ?? 0} active users
           </div>
           <div className="text-muted-foreground">
-            Visitors for the last 6 months
+            {stats?.totalUsers ?? 0} total managed users
           </div>
         </CardFooter>
       </Card>
       <Card className="@container/card">
         <CardHeader>
-          <CardDescription>New Customers</CardDescription>
+          <CardDescription>Remaining Users</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            1,234
+            {stats?.remainingUsers !== null ? stats?.remainingUsers ?? 0 : "∞"}
           </CardTitle>
           <CardAction>
             <Badge variant="outline">
-              <IconTrendingDown />
-              -20%
+              {stats?.remainingUsers !== null && (stats?.remainingUsers ?? 0) > 0 ? (
+                <IconTrendingUp className="size-3" />
+              ) : (
+                <IconTrendingDown className="size-3" />
+              )}
             </Badge>
           </CardAction>
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1.5 text-sm">
           <div className="line-clamp-1 flex gap-2 font-medium">
-            Down 20% this period <IconTrendingDown className="size-4" />
+            {stats?.maxManagedUsers !== null ? (
+              <>Plan limit: {stats.maxManagedUsers} users</>
+            ) : (
+              <>Unlimited users</>
+            )}
           </div>
           <div className="text-muted-foreground">
-            Acquisition needs attention
+            {stats?.remainingUsers !== null
+              ? `${stats.remainingUsers} slots available`
+              : "No limit on user creation"}
           </div>
         </CardFooter>
       </Card>
       <Card className="@container/card">
         <CardHeader>
-          <CardDescription>Active Accounts</CardDescription>
+          <CardDescription>Total Orders</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            45,678
+            {stats?.totalOrders ?? 0}
           </CardTitle>
           <CardAction>
             <Badge variant="outline">
-              <IconTrendingUp />
-              +12.5%
+              <IconShoppingCart className="size-3" />
             </Badge>
           </CardAction>
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1.5 text-sm">
           <div className="line-clamp-1 flex gap-2 font-medium">
-            Strong user retention <IconTrendingUp className="size-4" />
+            All time orders <IconTrendingUp className="size-4" />
           </div>
-          <div className="text-muted-foreground">Engagement exceed targets</div>
+          <div className="text-muted-foreground">Total orders processed</div>
         </CardFooter>
       </Card>
       <Card className="@container/card">
         <CardHeader>
-          <CardDescription>Growth Rate</CardDescription>
+          <CardDescription>Total Products</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            4.5%
+            {stats?.totalProducts ?? 0}
           </CardTitle>
           <CardAction>
             <Badge variant="outline">
-              <IconTrendingUp />
-              +4.5%
+              <IconPackage className="size-3" />
             </Badge>
           </CardAction>
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1.5 text-sm">
           <div className="line-clamp-1 flex gap-2 font-medium">
-            Steady performance increase <IconTrendingUp className="size-4" />
+            Active products <IconTrendingUp className="size-4" />
           </div>
-          <div className="text-muted-foreground">Meets growth projections</div>
+          <div className="text-muted-foreground">Products in catalog</div>
         </CardFooter>
       </Card>
     </div>

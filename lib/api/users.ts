@@ -16,23 +16,33 @@ export const getUsers = async (params?: GetUsersParams): Promise<UserListRespons
       page: params?.page || 1,
       rowsPerPage: params?.rowsPerPage || 10,
     };
-    
+
     if (params?.search && params.search.trim() !== "") {
       queryParams.search = params.search;
     }
-    
+
     if (params?.sort) {
       queryParams.sort = params.sort;
     }
-    
+
     if (params?.filter) {
       Object.assign(queryParams, params.filter);
     }
-    
+
     const { data } = await apiClient.get("/users", { params: queryParams });
     return data?.data || { users: [], meta: undefined };
   } catch (error: any) {
     toast.error(error?.response?.data?.message || error?.message || "Failed to fetch users");
+    throw error;
+  }
+};
+
+export const getUser = async (id: string): Promise<User> => {
+  try {
+    const { data } = await apiClient.get(`/users/${id}`);
+    return data?.data?.user;
+  } catch (error: any) {
+    toast.error(error?.response?.data?.message || error?.message || "Failed to fetch user");
     throw error;
   }
 };

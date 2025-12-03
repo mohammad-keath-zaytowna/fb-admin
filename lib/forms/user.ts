@@ -6,7 +6,6 @@ export const userFormSchema = z
     email: z.string().email("Must be a valid email"),
     password: z.string().min(6, "Password must be at least 6 characters").optional(),
     confirmPassword: z.string().optional(),
-    role: z.enum(["customer", "admin"]).optional(),
   })
   .refine(
     (data) => {

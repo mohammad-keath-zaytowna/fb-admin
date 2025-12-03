@@ -6,6 +6,7 @@ import { getProducts, GetProductsParams } from "@/lib/api/products";
 import { Product, ProductListResponse } from "@/types";
 import { useEffect, useState, useCallback, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
+import { useDebounce, useDebouncedCallback } from "use-debounce";
 
 function ProductsPageContent() {
   const searchParams = useSearchParams();
@@ -15,6 +16,7 @@ function ProductsPageContent() {
   const [page, setPage] = useState(Number(searchParams.get("page")) || 1);
   const [rowsPerPage, setRowsPerPage] = useState(Number(searchParams.get("rowsPerPage")) || 10);
   const [search, setSearch] = useState(searchParams.get("search") || "");
+  const [searchDebounced] = useDebounce(search, 200);
 
   const fetchProducts = useCallback(async (params?: GetProductsParams) => {
     try {
@@ -22,7 +24,7 @@ function ProductsPageContent() {
       const response = await getProducts({
         page: params?.page || page,
         rowsPerPage: params?.rowsPerPage || rowsPerPage,
-        search: params?.search !== undefined ? params.search : search || undefined,
+        search: params?.search !== undefined ? params.search : searchDebounced || undefined,
       });
       setData(response.products || []);
       setMeta(response.meta);
@@ -33,11 +35,11 @@ function ProductsPageContent() {
     } finally {
       setIsLoading(false);
     }
-  }, [page, rowsPerPage, search]);
+  }, [page, rowsPerPage, searchDebounced]);
 
   useEffect(() => {
-    fetchProducts({ page, rowsPerPage, search });
-  }, [page, rowsPerPage, search, fetchProducts]);
+    fetchProducts({ page, rowsPerPage, search: searchDebounced });
+  }, [page, rowsPerPage, searchDebounced, fetchProducts]);
 
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
@@ -68,7 +70,7 @@ function ProductsPageContent() {
     window.history.pushState({}, "", `?${params.toString()}`);
   };
 
-  if (isLoading) {
+  if (isLoading && !searchDebounced) {
     return (
       <div className="container mx-auto py-10">
         <div className="flex items-center justify-center h-64">

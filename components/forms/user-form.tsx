@@ -23,7 +23,6 @@ export function UserForm({ initialData, onSubmit, isLoading = false }: UserFormP
       email: initialData?.email || "",
       password: "",
       confirmPassword: "",
-      role: initialData?.role === "superAdmin" ? "admin" : (initialData?.role || "customer"),
     },
     mode: "onChange",
   });
@@ -49,16 +48,7 @@ export function UserForm({ initialData, onSubmit, isLoading = false }: UserFormP
           placeholder="john@example.com"
           disabled={isLoading || !!initialData}
         />
-        <RHFSelect
-          name="role"
-          label="Role"
-          placeholder="Select role"
-          options={[
-            { value: "customer", label: "Customer" },
-            { value: "admin", label: "Admin" },
-          ]}
-          disabled={isLoading}
-        />
+
         {!initialData && (
           <>
             <RHFInput

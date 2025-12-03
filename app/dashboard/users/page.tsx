@@ -7,6 +7,7 @@ import { User, UserListResponse } from "@/types";
 import { useEffect, useState, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
+import { useDebounce } from "use-debounce";
 
 function UsersPageContent() {
   const searchParams = useSearchParams();
@@ -16,6 +17,7 @@ function UsersPageContent() {
   const [page, setPage] = useState(Number(searchParams.get("page")) || 1);
   const [rowsPerPage, setRowsPerPage] = useState(Number(searchParams.get("rowsPerPage")) || 10);
   const [search, setSearch] = useState(searchParams.get("search") || "");
+  const [searchDebounced] = useDebounce(search, 200);
 
   const fetchUsers = useCallback(async (params?: GetUsersParams) => {
     try {
@@ -23,7 +25,7 @@ function UsersPageContent() {
       const response = await getUsers({
         page: params?.page || page,
         rowsPerPage: params?.rowsPerPage || rowsPerPage,
-        search: params?.search !== undefined ? params.search : search || undefined,
+        search: params?.search !== undefined ? params.search : searchDebounced || undefined,
       });
       setData(response.users || []);
       setMeta(response.meta);
@@ -34,11 +36,11 @@ function UsersPageContent() {
     } finally {
       setIsLoading(false);
     }
-  }, [page, rowsPerPage, search]);
+  }, [page, rowsPerPage, searchDebounced]);
 
   useEffect(() => {
-    fetchUsers({ page, rowsPerPage, search });
-  }, [page, rowsPerPage, search, fetchUsers]);
+    fetchUsers({ page, rowsPerPage, search: searchDebounced });
+  }, [page, rowsPerPage, searchDebounced, fetchUsers]);
 
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
@@ -56,7 +58,7 @@ function UsersPageContent() {
     window.history.pushState({}, "", `?${params.toString()}`);
   };
 
-  if (isLoading) {
+  if (isLoading && !searchDebounced) {
     return (
       <div className="container mx-auto py-10">
         <div className="flex items-center justify-center h-64">

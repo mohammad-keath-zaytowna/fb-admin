@@ -19,12 +19,9 @@ export const columns: ColumnDef<User>[] = [
     header: "Name",
     cell: ({ row }) => {
       return (
-        <a
-          href={`/dashboard/users/${row.original._id}`}
-          className="text-primary hover:underline"
-        >
+        <span>
           {row.original.name}
-        </a>
+        </span>
       );
     },
   },

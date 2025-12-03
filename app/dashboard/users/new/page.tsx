@@ -18,7 +18,6 @@ export default function NewUserPage() {
         email: data.email,
         password: data.password || "",
         confirmPassword: data.confirmPassword || "",
-        role: data.role || "customer",
       });
       router.push("/dashboard/users");
     } catch (error) {

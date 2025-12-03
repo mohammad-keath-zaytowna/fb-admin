@@ -1,7 +1,7 @@
 "use client";
 
 import { UserForm } from "@/components/forms/user-form";
-import { getUsers, UserFormData } from "@/lib/api/users";
+import { getUser, UserFormData } from "@/lib/api/users";
 import { useRouter, useParams } from "next/navigation";
 import { useState, useEffect, Suspense } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -19,13 +19,8 @@ function EditUserContent() {
     const fetchUser = async () => {
       try {
         setIsLoadingUser(true);
-        const response = await getUsers({ page: 1, rowsPerPage: 1000 });
-        const foundUser = response.users.find((u) => u._id === userId);
-        if (foundUser) {
-          setUser(foundUser);
-        } else {
-          router.push("/dashboard/users");
-        }
+        const response = await getUser(userId);
+        setUser(response);
       } catch (error) {
         console.error("Failed to fetch user:", error);
         router.push("/dashboard/users");
