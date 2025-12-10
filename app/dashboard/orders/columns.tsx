@@ -21,8 +21,8 @@ export const columns: ColumnDef<Order>[] = [
     },
   },
   {
-    accessorKey: "customerName",
-    header: "Customer",
+    accessorKey: "userName",
+    header: "User",
   },
   {
     accessorKey: "items",

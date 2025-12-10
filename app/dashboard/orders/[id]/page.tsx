@@ -99,13 +99,13 @@ function OrderDetailContent() {
           </div>
         </CardHeader>
         <CardContent className="space-y-6">
-          {/* Customer Information */}
+          {/* User Information */}
           <div>
-            <h3 className="font-semibold mb-3">Customer Information</h3>
+            <h3 className="font-semibold mb-3">User Information</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <p className="text-sm text-muted-foreground">Name</p>
-                <p className="font-medium">{order.customerName}</p>
+                <p className="font-medium">{order.userName}</p>
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Email</p>

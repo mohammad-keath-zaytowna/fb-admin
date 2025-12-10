@@ -1,4 +1,3 @@
-"use client";
 
 import { IconTrendingDown, IconTrendingUp, IconUsers, IconShoppingCart, IconPackage } from "@tabler/icons-react"
 
@@ -76,14 +75,14 @@ export function SectionCards({ stats, isLoading = false }: SectionCardsProps) {
         <CardFooter className="flex-col items-start gap-1.5 text-sm">
           <div className="line-clamp-1 flex gap-2 font-medium">
             {stats?.maxManagedUsers !== null ? (
-              <>Plan limit: {stats.maxManagedUsers} users</>
+              <>Plan limit: {stats?.maxManagedUsers} users</>
             ) : (
               <>Unlimited users</>
             )}
           </div>
           <div className="text-muted-foreground">
             {stats?.remainingUsers !== null
-              ? `${stats.remainingUsers} slots available`
+              ? `${stats?.remainingUsers} slots available`
               : "No limit on user creation"}
           </div>
         </CardFooter>

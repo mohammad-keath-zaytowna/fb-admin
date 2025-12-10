@@ -1,3 +1,4 @@
+"use client";
 import { ApiError } from "@/types/api";
 import axios, { AxiosInstance, AxiosResponse } from "axios";
 
@@ -15,16 +16,17 @@ const apiClient: AxiosInstance = axios.create({
   },
 });
 
+// Flag to prevent multiple redirects
+let isRedirecting = false;
+
 // Request interceptor to add auth token
 apiClient.interceptors.request.use(
   async (config) => {
     try {
       // Only access localStorage on the client side
-      if (typeof window !== "undefined") {
-        const token = localStorage.getItem("@auth_token");
-        if (token) {
-          config.headers.Authorization = `Bearer ${token}`;
-        }
+      const token = localStorage.getItem("@auth_token");
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
       }
       // Don't set Content-Type for FormData, let browser set it with boundary
       if (config.data instanceof FormData) {
@@ -49,17 +51,35 @@ apiClient.interceptors.response.use(
     if (error.response) {
       // Handle 401 Unauthorized - redirect to login
       if (error.response.status === 401) {
-        // Clear auth data
-        localStorage.removeItem("@auth_user");
-        localStorage.removeItem("@auth_token");
-        localStorage.removeItem("@auth_refresh_token");
-        
-        // Redirect to login if we're in the browser
-        if (typeof window !== "undefined") {
-          window.location.href = "/login";
+        // Only redirect if we're not already on the login page and not already redirecting
+        if (!isRedirecting) {
+          const currentPath = window.location.pathname;
+          // Don't redirect if already on login or auth pages
+          if (
+            !currentPath.startsWith("/login") &&
+            !currentPath.startsWith("/forgot-password") &&
+            !currentPath.startsWith("/reset-password")
+          ) {
+            isRedirecting = true;
+
+            // Clear auth data
+            try {
+              localStorage.removeItem("@auth_user");
+              localStorage.removeItem("@auth_token");
+              localStorage.removeItem("@auth_refresh_token");
+            } catch (e) {
+              // Ignore localStorage errors
+            }
+
+            // Use a small delay to prevent multiple redirects
+            setTimeout(() => {
+              window.location.href = "/login";
+              isRedirecting = false;
+            }, 100);
+          }
         }
       }
-      
+
       // Server responded with error status
       const apiError: ApiError = {
         message: error.response.data?.message || "An error occurred",

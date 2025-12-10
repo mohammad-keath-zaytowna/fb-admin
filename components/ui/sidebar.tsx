@@ -164,11 +164,6 @@ function Sidebar({
   collapsible?: "offcanvas" | "icon" | "none";
 }) {
   const { isMobile, state, openMobile, setOpenMobile } = useSidebar();
-  const [hasMounted, setHasMounted] = React.useState(false);
-
-  React.useEffect(() => {
-    setHasMounted(true);
-  }, []);
 
   if (collapsible === "none") {
     return (
@@ -186,7 +181,7 @@ function Sidebar({
   }
 
   // During SSR and initial render, always render desktop version to prevent hydration mismatch
-  if (hasMounted && isMobile) {
+  if (isMobile) {
     return (
       <Sheet open={openMobile} onOpenChange={setOpenMobile} {...props}>
         <SheetContent
@@ -579,7 +574,7 @@ function SidebarMenuAction({
         "peer-data-[size=lg]/menu-button:top-2.5",
         "group-data-[collapsible=icon]:hidden",
         showOnHover &&
-        "peer-data-[active=true]/menu-button:text-sidebar-accent-foreground group-focus-within/menu-item:opacity-100 group-hover/menu-item:opacity-100 data-[state=open]:opacity-100 md:opacity-0",
+          "peer-data-[active=true]/menu-button:text-sidebar-accent-foreground group-focus-within/menu-item:opacity-100 group-hover/menu-item:opacity-100 data-[state=open]:opacity-100 md:opacity-0",
         className
       )}
       {...props}
@@ -620,8 +615,7 @@ function SidebarMenuSkeleton({
   // const width = React.useMemo(() => {
   //   return `${Math.floor(Math.random() * 40) + 50}%`;
   // }, []);
-  const width = "80%";
-
+  // const width = "80%";
 
   return (
     <div
@@ -641,7 +635,7 @@ function SidebarMenuSkeleton({
         data-sidebar="menu-skeleton-text"
         style={
           {
-            "--skeleton-width": width,
+            // "--skeleton-width": width,
           } as React.CSSProperties
         }
       />

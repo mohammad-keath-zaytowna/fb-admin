@@ -1,3 +1,4 @@
+"use client";
 import { AuthState, User } from "@/types";
 import React, {
   createContext,
@@ -9,7 +10,11 @@ import React, {
 } from "react";
 
 interface AuthContextType extends AuthState {
-  login: (loginData: { user: User; accessToken?: string; refreshToken?: string }) => Promise<void>;
+  login: (loginData: {
+    user: User;
+    accessToken?: string;
+    refreshToken?: string;
+  }) => Promise<void>;
   logout: () => Promise<void>;
   updateUser: (user: User) => Promise<void>;
 }
@@ -35,30 +40,20 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     isAuthenticated: false,
   });
 
-  const loadStoredAuth = useCallback(async () => {
-    // Only access localStorage on the client side
-    if (typeof window === "undefined") {
-      setAuthState({
-        user: null,
-        isLoading: false,
-        isAuthenticated: false,
-      });
-      return;
-    }
+  const loadStoredAuth = useCallback(() => {
+    const storedUser = localStorage.getItem("@auth_user");
+    const storedToken = localStorage.getItem("@auth_token");
 
-    try {
-      const storedUser = localStorage.getItem("@auth_user");
-      const storedToken = localStorage.getItem("@auth_token");
-      
-      if (storedUser && storedToken) {
+    if (storedUser && storedToken) {
+      try {
         const user = JSON.parse(storedUser);
         setAuthState({
           user,
           isLoading: false,
           isAuthenticated: true,
         });
-      } else {
-        // Clear invalid auth data
+      } catch (parseError) {
+        // Invalid JSON, clear and set unauthenticated
         localStorage.removeItem("@auth_user");
         localStorage.removeItem("@auth_token");
         localStorage.removeItem("@auth_refresh_token");
@@ -68,13 +63,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           isAuthenticated: false,
         });
       }
-    } catch (error) {
-      console.error("Error loading stored auth:", error);
-      if (typeof window !== "undefined") {
-        localStorage.removeItem("@auth_user");
-        localStorage.removeItem("@auth_token");
-        localStorage.removeItem("@auth_refresh_token");
-      }
+    } else {
+      // Clear invalid auth data
+      localStorage.removeItem("@auth_user");
+      localStorage.removeItem("@auth_token");
+      localStorage.removeItem("@auth_refresh_token");
       setAuthState({
         user: null,
         isLoading: false,
@@ -84,27 +77,31 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    (async () => {
-      await loadStoredAuth();
-    })();
-  }, [loadStoredAuth]);
+    const id = setTimeout(() => {
+      loadStoredAuth();
+    }, 0);
 
-  const login = async (loginData: { user: User; accessToken?: string; refreshToken?: string }) => {
+    return () => clearTimeout(id);
+  }, []);
+
+  const login = async (loginData: {
+    user: User;
+    accessToken?: string;
+    refreshToken?: string;
+  }) => {
     try {
       const { user, accessToken, refreshToken } = loginData;
-      
-      if (typeof window !== "undefined") {
-        localStorage.setItem("@auth_user", JSON.stringify(user));
-        
-        if (accessToken) {
-          localStorage.setItem("@auth_token", accessToken);
-        }
-        
-        if (refreshToken) {
-          localStorage.setItem("@auth_refresh_token", refreshToken);
-        }
+
+      localStorage.setItem("@auth_user", JSON.stringify(user));
+
+      if (accessToken) {
+        localStorage.setItem("@auth_token", accessToken);
       }
-      
+
+      if (refreshToken) {
+        localStorage.setItem("@auth_refresh_token", refreshToken);
+      }
+
       setAuthState({
         user,
         isLoading: false,
@@ -118,11 +115,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const logout = async () => {
     try {
-      if (typeof window !== "undefined") {
-        localStorage.removeItem("@auth_user");
-        localStorage.removeItem("@auth_token");
-        localStorage.removeItem("@auth_refresh_token");
-      }
+      localStorage.removeItem("@auth_user");
+      localStorage.removeItem("@auth_token");
+      localStorage.removeItem("@auth_refresh_token");
 
       setAuthState({
         user: null,
@@ -137,9 +132,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const updateUser = async (updatedUser: User) => {
     try {
-      if (typeof window !== "undefined") {
-        localStorage.setItem("@auth_user", JSON.stringify(updatedUser));
-      }
+      localStorage.setItem("@auth_user", JSON.stringify(updatedUser));
       setAuthState((prev) => ({
         ...prev,
         user: updatedUser,

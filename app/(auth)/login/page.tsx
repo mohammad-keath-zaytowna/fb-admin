@@ -11,7 +11,7 @@ function LoginPage() {
             <h1 className="text-3xl font-bold">Logo</h1>
             <div className="p-14">
               <h3 className="text-3xl font-bold ">
-                Welcome to the customer Service Dashboard
+                Welcome to the user Service Dashboard
               </h3>
               <h3 className="text-2xl mt-5 ">
                 Your all-in solution for your page management

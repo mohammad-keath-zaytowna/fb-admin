@@ -52,7 +52,7 @@ export const createUser = async (userData: {
   email: string;
   password: string;
   confirmPassword: string;
-  role?: "customer" | "admin";
+  role?: "user" | "admin";
 }): Promise<User> => {
   try {
     const { data } = await apiClient.post("/users", userData);

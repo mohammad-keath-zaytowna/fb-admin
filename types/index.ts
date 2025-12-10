@@ -2,7 +2,7 @@ export type User = {
   _id: string;
   name: string;
   email: string;
-  role: "customer" | "admin" | "superAdmin";
+  role: "user" | "admin" | "superAdmin";
   status: "active" | "blocked" | "deleted";
   createdAt?: string;
   updatedAt?: string;
@@ -76,7 +76,7 @@ export type Order = {
   discount?: number;
   notes?: string;
   phoneNumber: string;
-  customerName: string;
+  userName: string;
   status: "pending" | "paid" | "shipped" | "completed" | "cancelled";
   createdByAdmin?: {
     _id: string;

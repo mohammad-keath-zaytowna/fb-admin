@@ -7,7 +7,7 @@ export interface GetOrdersParams {
   rowsPerPage?: number;
   search?: string;
   status?: string;
-  customer?: string;
+  user?: string;
   sort?: string;
   sortBy?: string;
   startDate?: string;
@@ -29,8 +29,8 @@ export const getOrders = async (params?: GetOrdersParams): Promise<OrderListResp
       queryParams.status = params.status;
     }
     
-    if (params?.customer && params.customer.trim() !== "") {
-      queryParams.customer = params.customer;
+    if (params?.user && params.user.trim() !== "") {
+      queryParams.user = params.user;
     }
     
     if (params?.sort) {
