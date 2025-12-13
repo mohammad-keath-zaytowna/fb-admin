@@ -3,7 +3,13 @@
 import { getOrderById } from "@/lib/api/orders";
 import { useRouter, useParams } from "next/navigation";
 import { useState, useEffect, Suspense } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Order } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -59,22 +65,38 @@ function OrderDetailContent() {
 
   const user = typeof order.user === "string" ? null : order.user;
   const statusConfig = {
-    pending: { label: "Pending", className: "bg-yellow-500/10 text-yellow-700 dark:text-yellow-400 border-yellow-500/20" },
-    paid: { label: "Paid", className: "bg-blue-500/10 text-blue-700 dark:text-blue-400 border-blue-500/20" },
-    shipped: { label: "Shipped", className: "bg-purple-500/10 text-purple-700 dark:text-purple-400 border-purple-500/20" },
-    completed: { label: "Completed", className: "bg-green-500/10 text-green-700 dark:text-green-400 border-green-500/20" },
-    cancelled: { label: "Cancelled", className: "bg-red-500/10 text-red-700 dark:text-red-400 border-red-500/20" },
+    pending: {
+      label: "Pending",
+      className:
+        "bg-yellow-500/10 text-yellow-700 dark:text-yellow-400 border-yellow-500/20",
+    },
+    paid: {
+      label: "Paid",
+      className:
+        "bg-blue-500/10 text-blue-700 dark:text-blue-400 border-blue-500/20",
+    },
+    shipped: {
+      label: "Shipped",
+      className:
+        "bg-purple-500/10 text-purple-700 dark:text-purple-400 border-purple-500/20",
+    },
+    completed: {
+      label: "Completed",
+      className:
+        "bg-green-500/10 text-green-700 dark:text-green-400 border-green-500/20",
+    },
+    cancelled: {
+      label: "Cancelled",
+      className:
+        "bg-red-500/10 text-red-700 dark:text-red-400 border-red-500/20",
+    },
   };
   const statusBadge = statusConfig[order.status] || statusConfig.pending;
 
   return (
     <div className="container mx-auto py-10 max-w-4xl">
       <div className="flex items-center justify-between mb-6 no-print">
-        <Button
-          variant="ghost"
-          onClick={() => router.back()}
-          className="gap-2"
-        >
+        <Button variant="ghost" onClick={() => router.back()} className="gap-2">
           <IconArrowLeft className="h-4 w-4" />
           Back
         </Button>
@@ -84,7 +106,7 @@ function OrderDetailContent() {
         </Button>
       </div>
 
-      <Card className="print-card">
+      <Card className="print-card print-show">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
@@ -127,7 +149,8 @@ function OrderDetailContent() {
             <h3 className="font-semibold mb-3">Order Items</h3>
             <div className="space-y-4">
               {order.items.map((item, index) => {
-                const product = typeof item.prod_id === "string" ? null : item.prod_id;
+                const product =
+                  typeof item.prod_id === "string" ? null : item.prod_id;
                 return (
                   <div
                     key={index}
@@ -145,7 +168,9 @@ function OrderDetailContent() {
                       </div>
                     )}
                     <div className="flex-1">
-                      <p className="font-medium">{product?.name || "Product"}</p>
+                      <p className="font-medium">
+                        {product?.name || "Product"}
+                      </p>
                       <div className="flex gap-4 text-sm text-muted-foreground mt-1">
                         {item.size && <span>Size: {item.size}</span>}
                         {item.color && <span>Color: {item.color}</span>}
@@ -170,12 +195,21 @@ function OrderDetailContent() {
               <div className="w-full max-w-sm space-y-2">
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Subtotal</span>
-                  <span>${(order.total - order.shipping + (order.discount || 0)).toFixed(2)}</span>
+                  <span>
+                    $
+                    {(
+                      order.total -
+                      order.shipping +
+                      (order.discount || 0)
+                    ).toFixed(2)}
+                  </span>
                 </div>
                 {order.discount && order.discount > 0 && (
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Discount</span>
-                    <span className="text-green-600">-${order.discount.toFixed(2)}</span>
+                    <span className="text-green-600">
+                      -${order.discount.toFixed(2)}
+                    </span>
                   </div>
                 )}
                 <div className="flex justify-between text-sm">
@@ -221,4 +255,3 @@ export default function OrderDetailPage() {
     </Suspense>
   );
 }
-

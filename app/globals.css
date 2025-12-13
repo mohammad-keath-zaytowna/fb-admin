@@ -2,12 +2,37 @@
 @import "tw-animate-css";
 
 @media print {
-  .no-print {
-    display: none !important;
+  /* hide everything */
+  body * {
+    visibility: hidden;
   }
+
+  /* show only the print area */
+  .print-show,
+  .print-show * {
+    visibility: visible;
+  }
+
+  /* make sure it takes the full page */
+  .print-show {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+
+  /* optional: remove borders/shadows etc. */
   .print-card {
     box-shadow: none !important;
     border: none !important;
+  }
+
+  @page {
+    margin: 0;
+  }
+
+  body {
+    margin: 0;
   }
 }
 

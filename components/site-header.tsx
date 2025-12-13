@@ -14,7 +14,7 @@ export function SiteHeader() {
           className="mx-2 data-[orientation=vertical]:h-4"
         />
         <h1 className="text-base font-medium capitalize">
-          {pathname.split("/").pop()}
+          {pathname.split("/")?.[2]}
         </h1>
       </div>
     </header>
