@@ -31,7 +31,7 @@ export function ProductForm({ initialData, onSubmit, isLoading = false }: Produc
       name: initialData?.name || "",
       image: initialData?.image || "",
       category: initialData?.category || "",
-      price: initialData?.price || 0,
+      price: initialData?.price || '',
       description: initialData?.description || "",
       colors: initialData?.colors || [],
       sizes: initialData?.sizes || [],

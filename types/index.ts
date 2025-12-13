@@ -31,7 +31,7 @@ export type Product = {
   name: string;
   image: string;
   category: string;
-  price: number;
+  price: string;
   description?: string;
   colors?: string[];
   sizes?: string[];
@@ -51,11 +51,13 @@ export type ProductListResponse = {
 };
 
 export type OrderItem = {
-  prod_id: {
-    _id: string;
-    name: string;
-    image?: string;
-  } | string;
+  prod_id:
+    | {
+        _id: string;
+        name: string;
+        image?: string;
+      }
+    | string;
   count: number;
   size?: string;
   color?: string;
@@ -64,11 +66,13 @@ export type OrderItem = {
 
 export type Order = {
   _id: string;
-  user: {
-    _id: string;
-    name: string;
-    email: string;
-  } | string;
+  user:
+    | {
+        _id: string;
+        name: string;
+        email: string;
+      }
+    | string;
   items: OrderItem[];
   address: string;
   shipping: number;
@@ -78,11 +82,13 @@ export type Order = {
   phoneNumber: string;
   userName: string;
   status: "pending" | "paid" | "shipped" | "completed" | "cancelled";
-  createdByAdmin?: {
-    _id: string;
-    name: string;
-    email: string;
-  } | string;
+  createdByAdmin?:
+    | {
+        _id: string;
+        name: string;
+        email: string;
+      }
+    | string;
   createdAt?: string;
   updatedAt?: string;
 };

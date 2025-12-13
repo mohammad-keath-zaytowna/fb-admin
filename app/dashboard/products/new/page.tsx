@@ -1,10 +1,17 @@
 "use client";
 
 import { ProductForm } from "@/components/forms/product-form";
-import { createProduct, ProductFormData } from "@/lib/api/products";
+import { createProduct } from "@/lib/api/products";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { ProductFormData } from "@/lib/forms/product";
 
 export default function NewProductPage() {
   const router = useRouter();
@@ -17,7 +24,7 @@ export default function NewProductPage() {
         name: data.name,
         image: data.image,
         category: data.category,
-        price: typeof data.price === "string" ? parseFloat(data.price) : data.price,
+        price: data.price,
         description: data.description,
         colors: data.colors,
         sizes: data.sizes,
@@ -44,4 +51,3 @@ export default function NewProductPage() {
     </div>
   );
 }
-

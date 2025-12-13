@@ -4,10 +4,8 @@ import { userFormSchema, UserFormData } from "@/lib/forms/user";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
 import RHFInput from "../react-hook-form/rhf-input";
-import RHFSelect from "../react-hook-form/rhf-select";
 import { Button } from "../ui/button";
 import { User } from "@/types";
-import { useState } from "react";
 
 interface UserFormProps {
   initialData?: User;

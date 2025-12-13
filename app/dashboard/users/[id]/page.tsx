@@ -1,11 +1,12 @@
 "use client";
 
 import { UserForm } from "@/components/forms/user-form";
-import { getUser, UserFormData } from "@/lib/api/users";
+import { getUser } from "@/lib/api/users";
 import { useRouter, useParams } from "next/navigation";
 import { useState, useEffect, Suspense } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { User } from "@/types";
+import { UserFormData } from "@/lib/forms/user";
 
 function EditUserContent() {
   const router = useRouter();
@@ -34,7 +35,7 @@ function EditUserContent() {
     }
   }, [userId, router]);
 
-  const handleSubmit = async (data: UserFormData) => {
+  const handleSubmit = async (_data: UserFormData) => {
     try {
       setIsLoading(true);
       // Note: Backend doesn't have update user endpoint, only status update

@@ -1,11 +1,11 @@
-"use client"
+"use client";
 
-import { ColumnDef } from "@tanstack/react-table"
-import { Product } from "@/types"
-import { Badge } from "@/components/ui/badge"
-import { ProductActions } from "./product-actions"
-import Image from "next/image"
-import { getImageUrl } from "@/lib/utils/image"
+import { ColumnDef } from "@tanstack/react-table";
+import { Product } from "@/types";
+import { Badge } from "@/components/ui/badge";
+import { ProductActions } from "./product-actions";
+import Image from "next/image";
+import { getImageUrl } from "@/lib/utils/image";
 
 export const columns: ColumnDef<Product>[] = [
   {
@@ -41,18 +41,14 @@ export const columns: ColumnDef<Product>[] = [
     accessorKey: "category",
     header: "Category",
     cell: ({ row }) => {
-      return (
-        <Badge variant="outline">
-          {row.original.category}
-        </Badge>
-      );
+      return <Badge variant="outline">{row.original.category}</Badge>;
     },
   },
   {
     accessorKey: "price",
     header: "Price",
     cell: ({ row }) => {
-      return `$${row.original.price.toFixed(2)}`;
+      return `$${Number(row.original.price).toFixed(2)}`;
     },
   },
   {
@@ -61,9 +57,21 @@ export const columns: ColumnDef<Product>[] = [
     cell: ({ row }) => {
       const status = row.original.status;
       const statusConfig = {
-        active: { label: "Active", className: "bg-green-500/10 text-green-700 dark:text-green-400 border-green-500/20" },
-        inactive: { label: "Inactive", className: "bg-yellow-500/10 text-yellow-700 dark:text-yellow-400 border-yellow-500/20" },
-        deleted: { label: "Deleted", className: "bg-gray-500/10 text-gray-700 dark:text-gray-400 border-gray-500/20" },
+        active: {
+          label: "Active",
+          className:
+            "bg-green-500/10 text-green-700 dark:text-green-400 border-green-500/20",
+        },
+        inactive: {
+          label: "Inactive",
+          className:
+            "bg-yellow-500/10 text-yellow-700 dark:text-yellow-400 border-yellow-500/20",
+        },
+        deleted: {
+          label: "Deleted",
+          className:
+            "bg-gray-500/10 text-gray-700 dark:text-gray-400 border-gray-500/20",
+        },
       };
       const config = statusConfig[status] || statusConfig.active;
       return (
@@ -88,9 +96,7 @@ export const columns: ColumnDef<Product>[] = [
       return <ProductActions product={row.original} />;
     },
   },
-]
+];
 
 // Add edit link to product name
-export const columnsWithEdit: ColumnDef<Product>[] = columns
-
-
+export const columnsWithEdit: ColumnDef<Product>[] = columns;

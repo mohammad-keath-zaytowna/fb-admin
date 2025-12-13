@@ -1,10 +1,11 @@
 "use client";
 
 import { UserForm } from "@/components/forms/user-form";
-import { createUser, UserFormData } from "@/lib/api/users";
+import { createUser } from "@/lib/api/users";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { UserFormData } from "@/lib/forms/user";
 
 export default function NewUserPage() {
   const router = useRouter();

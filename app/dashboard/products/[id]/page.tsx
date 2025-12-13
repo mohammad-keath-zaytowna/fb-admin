@@ -1,17 +1,19 @@
 "use client";
 
 import { ProductForm } from "@/components/forms/product-form";
-import { getProductById, updateProduct, ProductFormData } from "@/lib/api/products";
+import { getProductById, updateProduct } from "@/lib/api/products";
 import { useRouter, useParams } from "next/navigation";
 import { useState, useEffect, Suspense } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { ProductFormData } from "@/lib/forms/product";
+import { Product } from "@/types";
 
 function EditProductContent() {
   const router = useRouter();
   const params = useParams();
   const productId = params.id as string;
   const [isLoading, setIsLoading] = useState(false);
-  const [product, setProduct] = useState<any>(null);
+  const [product, setProduct] = useState<Product | null>(null);
   const [isLoadingProduct, setIsLoadingProduct] = useState(true);
 
   useEffect(() => {
@@ -40,7 +42,7 @@ function EditProductContent() {
         name: data.name,
         image: data.image,
         category: data.category,
-        price: typeof data.price === "string" ? parseFloat(data.price) : data.price,
+        price: data.price,
         description: data.description,
         colors: data.colors,
         sizes: data.sizes,
