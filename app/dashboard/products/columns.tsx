@@ -48,7 +48,7 @@ export const columns: ColumnDef<Product>[] = [
     accessorKey: "price",
     header: "Price",
     cell: ({ row }) => {
-      return `$${Number(row.original.price).toFixed(2)}`;
+      return `JOD ${Number(row.original.price).toFixed(2)}`;
     },
   },
   {

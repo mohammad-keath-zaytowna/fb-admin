@@ -20,8 +20,8 @@ function LoginPage() {
             <h2>@2025</h2>
           </div>
         </div>
-        <div className="flex-4 min-h-screen flex flex-col items-center justify-center px-30 py-30 ">
-          <div className="min-w-lg">
+        <div className="flex-4 min-h-screen flex flex-col items-center justify-center lg:px-30 px-5 py-30 ">
+          <div className="lg:min-w-lg w-full">
             <h3 className="text-2xl font-bold mb-10">Log in to your account</h3>
             <LoginForm />
           </div>

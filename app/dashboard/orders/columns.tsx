@@ -37,7 +37,7 @@ export const columns: ColumnDef<Order>[] = [
     accessorKey: "total",
     header: "Total",
     cell: ({ row }) => {
-      return `$${row.original.total.toFixed(2)}`;
+      return `JOD ${row.original.total.toFixed(2)}`;
     },
   },
   {

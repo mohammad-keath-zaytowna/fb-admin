@@ -1,16 +1,16 @@
-"use client"
+"use client";
 
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Button } from "@/components/ui/button"
-import { IconDotsVertical } from "@tabler/icons-react"
-import { updateOrderStatus } from "@/lib/api/orders"
-import { useRouter } from "next/navigation"
-import { Order } from "@/types"
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import { IconDotsVertical } from "@tabler/icons-react";
+import { updateOrderStatus } from "@/lib/api/orders";
+import { useRouter } from "next/navigation";
+import { Order } from "@/types";
 
 interface OrderActionsProps {
   order: Order;
@@ -18,17 +18,23 @@ interface OrderActionsProps {
 
 export function OrderActions({ order }: OrderActionsProps) {
   const router = useRouter();
-  
-  const handleStatusChange = async (newStatus: "pending" | "paid" | "shipped" | "completed" | "cancelled") => {
+
+  const handleStatusChange = async (
+    newStatus: "pending" | "paid" | "shipped" | "completed" | "cancelled"
+  ) => {
     try {
       await updateOrderStatus(order._id, newStatus);
+      console.log("teste");
       router.refresh();
     } catch (error) {
       console.error("Failed to update order status:", error);
     }
   };
 
-  const statusOptions: Array<{ value: "pending" | "paid" | "shipped" | "completed" | "cancelled"; label: string }> = [
+  const statusOptions: Array<{
+    value: "pending" | "paid" | "shipped" | "completed" | "cancelled";
+    label: string;
+  }> = [
     { value: "pending", label: "Pending" },
     { value: "paid", label: "Paid" },
     { value: "shipped", label: "Shipped" },
@@ -58,4 +64,3 @@ export function OrderActions({ order }: OrderActionsProps) {
     </DropdownMenu>
   );
 }
-

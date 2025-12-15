@@ -64,7 +64,7 @@ function LoginForm() {
           placeholder="••••••••"
           disabled={isLoading}
         />
-        <div className="flex justify-end">
+        {/* <div className="flex justify-end">
           <Button
             onClick={handleForgotPassword}
             type="button"
@@ -74,7 +74,7 @@ function LoginForm() {
           >
             forgot password?
           </Button>
-        </div>
+        </div> */}
         <Button
           type="submit"
           variant="default"

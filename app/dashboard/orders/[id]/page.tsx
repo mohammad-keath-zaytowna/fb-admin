@@ -178,9 +178,9 @@ function OrderDetailContent() {
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className="font-semibold">${item.price.toFixed(2)}</p>
+                      <p className="font-semibold">JOD {item.price.toFixed(2)}</p>
                       <p className="text-sm text-muted-foreground">
-                        Total: ${(item.price * item.count).toFixed(2)}
+                        Total: JOD {(item.price * item.count).toFixed(2)}
                       </p>
                     </div>
                   </div>
@@ -196,7 +196,7 @@ function OrderDetailContent() {
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Subtotal</span>
                   <span>
-                    $
+                    JOD{" "}
                     {(
                       order.total -
                       order.shipping +
@@ -208,17 +208,17 @@ function OrderDetailContent() {
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Discount</span>
                     <span className="text-green-600">
-                      -${order.discount.toFixed(2)}
+                      -JOD {order.discount.toFixed(2)}
                     </span>
                   </div>
                 )}
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Shipping</span>
-                  <span>${order.shipping.toFixed(2)}</span>
+                  <span>JOD {order.shipping.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-lg font-bold border-t pt-2">
                   <span>Total</span>
-                  <span>${order.total.toFixed(2)}</span>
+                  <span>JOD {order.total.toFixed(2)}</span>
                 </div>
               </div>
             </div>
