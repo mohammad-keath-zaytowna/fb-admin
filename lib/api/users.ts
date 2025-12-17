@@ -88,3 +88,19 @@ export const deleteUser = async (userId: string): Promise<void> => {
   }
 };
 
+export const updateUserPassword = async (
+  userId: string,
+  newPassword: string,
+  confirmPassword: string
+): Promise<void> => {
+  try {
+    const { data } = await apiClient.patch(`/users/${userId}/password`, {
+      newPassword,
+      confirmPassword,
+    });
+    toast.success(data?.message || "Password updated successfully");
+  } catch (error: any) {
+    toast.error(error?.response?.data?.message || error?.message || "Failed to update password");
+    throw error;
+  }
+};
