@@ -7,6 +7,15 @@ const inter = Inter({
   subsets: ["latin"],
 });
 
+export const metadata = {
+  title: "Admin Dashboard",
+  description: "Admin Dashboard for managing users, products, and orders",
+  icons: {
+    icon: "/logo_bg.png",
+    apple: "/logo_bg.png",
+  },
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{

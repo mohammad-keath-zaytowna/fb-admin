@@ -9,6 +9,7 @@ import {
   IconShoppingCart,
   IconUsers,
 } from "@tabler/icons-react";
+import Image from "next/image";
 
 import { NavMain } from "@/components/nav-main";
 import { NavUser } from "@/components/nav-user";
@@ -73,8 +74,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               className="data-[slot=sidebar-menu-button]:!p-1.5"
             >
               <a href="#">
-                <IconInnerShadowTop className="!size-5" />
-                <span className="text-base font-semibold">Ads Manager</span>
+                <Image
+                  src="/full-logo.png"
+                  alt="Logo"
+                  width={140}
+                  height={40}
+                  className="object-contain"
+                />
               </a>
             </SidebarMenuButton>
           </SidebarMenuItem>

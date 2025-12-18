@@ -42,6 +42,7 @@ function OrderDetailContent() {
     }
   }, [orderId, router]);
 
+
   const handlePrint = () => {
     window.print();
   };

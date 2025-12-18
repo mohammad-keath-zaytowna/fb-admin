@@ -1,5 +1,6 @@
 import LoginForm from "@/components/forms/login-form";
 import { LoginRedirect } from "@/components/login-redirect";
+import Image from "next/image";
 
 function LoginPage() {
   return (
@@ -8,7 +9,14 @@ function LoginPage() {
       <section className="lg:flex h-full">
         <div className="hidden lg:block flex-3 xl:flex-4 min-h-screen bg-primary-dark">
           <div className="flex flex-col justify-between h-full p-5 text-primary-foreground">
-            <h1 className="text-3xl font-bold">Logo</h1>
+            {/* <Image
+              src="/logo_bg.png"
+              alt="Logo"
+              width={180}
+              height={60}
+              className="object-contain"
+            /> */}
+            <div/>
             <div className="p-14">
               <h3 className="text-3xl font-bold ">
                 Welcome to the user Service Dashboard
