@@ -21,7 +21,7 @@ const CURRENCIES = [
 ];
 
 export default function SettingsPage() {
-    const [currency, setCurrency] = useState<string>("USD");
+    const [currency, setCurrency] = useState<string>(JSON.parse(localStorage.getItem("user") || "{}")?.currency || "USD");
     const [isLoading, setIsLoading] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
 
@@ -53,10 +53,6 @@ export default function SettingsPage() {
                 localStorage.setItem("user", JSON.stringify(user));
             }
 
-            // Reload the page to apply currency changes
-            setTimeout(() => {
-                window.location.reload();
-            }, 1000);
         } catch (error) {
             console.error("Failed to update currency:", error);
         } finally {
