@@ -21,7 +21,7 @@ const CURRENCIES = [
 ];
 
 export default function SettingsPage() {
-    const [currency, setCurrency] = useState<string>(JSON.parse(localStorage.getItem("user") || "{}")?.currency || "USD");
+    const [currency, setCurrency] = useState<string>("");
     const [isLoading, setIsLoading] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
 
