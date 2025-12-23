@@ -1,7 +1,7 @@
 "use client";
 
 import { UserForm } from "@/components/forms/user-form";
-import { getUser } from "@/lib/api/users";
+import { getUser, updateUser } from "@/lib/api/users";
 import { useRouter, useParams } from "next/navigation";
 import { useState, useEffect, Suspense } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -38,9 +38,7 @@ function EditUserContent() {
   const handleSubmit = async (_data: UserFormData) => {
     try {
       setIsLoading(true);
-      // Note: Backend doesn't have update user endpoint, only status update
-      // This would need to be implemented in the backend
-      // For now, we'll just redirect
+      await updateUser(userId, _data as any);
       router.push("/dashboard/users");
     } catch (error) {
       console.error("Failed to update user:", error);

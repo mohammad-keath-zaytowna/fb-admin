@@ -22,6 +22,7 @@ function OrderDetailContent() {
   const orderId = params.id as string;
   const [order, setOrder] = useState<Order | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [modalImage, setModalImage] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchOrder = async () => {
@@ -41,6 +42,15 @@ function OrderDetailContent() {
       fetchOrder();
     }
   }, [orderId, router]);
+
+  useEffect(() => {
+    if (!modalImage) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setModalImage(null);
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [modalImage]);
 
 
   const handlePrint = () => {
@@ -158,15 +168,23 @@ function OrderDetailContent() {
                     className="flex items-center gap-4 p-4 border rounded-lg"
                   >
                     {product?.image && (
-                      <div className="w-20 h-20 relative rounded-md overflow-hidden bg-muted">
-                        <Image
-                          src={product.image}
-                          alt={product.name}
-                          fill
-                          className="object-cover"
-                          sizes="80px"
-                        />
-                      </div>
+                          <div
+                            className="w-20 h-20 relative rounded-md overflow-hidden bg-muted cursor-pointer"
+                            role="button"
+                            tabIndex={0}
+                            onClick={() => setModalImage(product.image)}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter") setModalImage(product.image);
+                            }}
+                          >
+                            <Image
+                              src={product.image}
+                              alt={product.name}
+                              fill
+                              className="object-cover"
+                              sizes="80px"
+                            />
+                          </div>
                     )}
                     <div className="flex-1">
                       <p className="font-medium">
@@ -234,6 +252,35 @@ function OrderDetailContent() {
           )}
         </CardContent>
       </Card>
+
+      {modalImage && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4"
+          onClick={() => setModalImage(null)}
+        >
+          <div
+            className="relative max-w-[90vw] max-h-[90vh]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              aria-label="Close image"
+              className="absolute top-2 right-2 z-50 rounded-full bg-black/40 text-white p-2"
+              onClick={() => setModalImage(null)}
+            >
+              ✕
+            </button>
+            <div className="w-full h-full flex items-center justify-center">
+              <Image
+                src={modalImage}
+                alt="Preview"
+                width={1200}
+                height={800}
+                className="object-contain rounded"
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

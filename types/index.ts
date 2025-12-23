@@ -4,6 +4,7 @@ export type User = {
   email: string;
   role: "user" | "admin" | "superAdmin";
   status: "active" | "blocked" | "deleted";
+  is_general_products?: boolean;
   createdAt?: string;
   updatedAt?: string;
   image?: string;

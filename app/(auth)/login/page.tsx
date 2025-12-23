@@ -1,6 +1,5 @@
 import LoginForm from "@/components/forms/login-form";
 import { LoginRedirect } from "@/components/login-redirect";
-import Image from "next/image";
 
 function LoginPage() {
   return (

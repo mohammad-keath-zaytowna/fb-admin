@@ -128,19 +128,24 @@ export function ProductForm({ initialData, onSubmit, isLoading = false }: Produc
           {colors.length > 0 && (
             <div className="flex flex-wrap gap-2 mt-2">
               {colors.map((color) => (
-                <div
-                  key={color}
-                  className="flex items-center gap-1 px-2 py-1 bg-muted rounded-md"
-                >
-                  <span>{color}</span>
-                  <button
-                    type="button"
-                    onClick={() => removeColor(color)}
-                    className="text-destructive hover:text-destructive/80"
-                  >
-                    <IconX className="h-3 w-3" />
-                  </button>
-                </div>
+                    <div
+                      key={color}
+                      className="flex items-center gap-2 px-2 py-1 bg-muted rounded-md"
+                    >
+                      <div
+                        aria-hidden
+                        style={{ backgroundColor: color }}
+                        className="w-3 h-3 rounded-sm border border-input"
+                      />
+                      <span>{color}</span>
+                      <button
+                        type="button"
+                        onClick={() => removeColor(color)}
+                        className="text-destructive hover:text-destructive/80"
+                      >
+                        <IconX className="h-3 w-3" />
+                      </button>
+                    </div>
               ))}
             </div>
           )}

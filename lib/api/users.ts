@@ -104,3 +104,14 @@ export const updateUserPassword = async (
     throw error;
   }
 };
+
+export const updateUser = async (userId: string, updateData: Partial<User>): Promise<User> => {
+  try {
+    const { data } = await apiClient.patch(`/users/${userId}`, updateData);
+    toast.success(data?.message || 'User updated successfully');
+    return data?.data?.user;
+  } catch (error: any) {
+    toast.error(error?.response?.data?.message || error?.message || 'Failed to update user');
+    throw error;
+  }
+};

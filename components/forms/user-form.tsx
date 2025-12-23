@@ -6,6 +6,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import RHFInput from "../react-hook-form/rhf-input";
 import { Button } from "../ui/button";
 import { User } from "@/types";
+import { Checkbox } from "../ui/checkbox";
 
 interface UserFormProps {
   initialData?: User;
@@ -13,7 +14,11 @@ interface UserFormProps {
   isLoading?: boolean;
 }
 
-export function UserForm({ initialData, onSubmit, isLoading = false }: UserFormProps) {
+export function UserForm({
+  initialData,
+  onSubmit,
+  isLoading = false,
+}: UserFormProps) {
   const form = useForm<UserFormData>({
     resolver: zodResolver(userFormSchema),
     defaultValues: {
@@ -21,11 +26,13 @@ export function UserForm({ initialData, onSubmit, isLoading = false }: UserFormP
       email: initialData?.email || "",
       password: "",
       confirmPassword: "",
+      is_general_products: initialData?.is_general_products ?? true,
     },
     mode: "onChange",
   });
 
   const handleSubmit = async (data: UserFormData) => {
+    console.log("submitting...");
     await onSubmit(data);
   };
 
@@ -70,16 +77,34 @@ export function UserForm({ initialData, onSubmit, isLoading = false }: UserFormP
             Leave password fields empty to keep current password
           </p>
         )}
+        {initialData && initialData.role === "admin" && (
+          <div className="mt-2">
+            <label className="flex items-center gap-3">
+              <Checkbox
+                defaultChecked={initialData.is_general_products}
+                onCheckedChange={(val) =>
+                  form.setValue("is_general_products" as any, val as any)
+                }
+              />
+              <span className="text-sm">
+                General Products (users see admin products)
+              </span>
+            </label>
+          </div>
+        )}
         <Button
           type="submit"
           variant="default"
           disabled={isLoading}
           className="w-full mt-2 p-6"
         >
-          {isLoading ? "Saving..." : initialData ? "Update User" : "Create User"}
+          {isLoading
+            ? "Saving..."
+            : initialData
+            ? "Update User"
+            : "Create User"}
         </Button>
       </form>
     </FormProvider>
   );
 }
-
