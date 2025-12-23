@@ -3,6 +3,8 @@
 import { getOrderById } from "@/lib/api/orders";
 import { useRouter, useParams } from "next/navigation";
 import { useState, useEffect, Suspense } from "react";
+import { useAuthContext } from "@/contexts/AuthContext";
+import { formatPrice, getUserCurrency } from "@/lib/utils/currency";
 import {
   Card,
   CardContent,
@@ -23,6 +25,8 @@ function OrderDetailContent() {
   const [order, setOrder] = useState<Order | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [modalImage, setModalImage] = useState<string | null>(null);
+  const { user } = useAuthContext();
+  const currency = getUserCurrency(user);
 
   useEffect(() => {
     const fetchOrder = async () => {
@@ -73,7 +77,7 @@ function OrderDetailContent() {
     return null;
   }
 
-  const user = typeof order.user === "string" ? null : order.user;
+  const currUser = typeof order.user === "string" ? null : order.user;
   const statusConfig = {
     pending: {
       label: "Pending",
@@ -150,7 +154,7 @@ function OrderDetailContent() {
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Email</p>
-                <p className="font-medium">{user?.email || "N/A"}</p>
+                <p className="font-medium">{currUser?.email || "N/A"}</p>
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Phone</p>
@@ -207,10 +211,10 @@ function OrderDetailContent() {
                     </div>
                     <div className="text-right">
                       <p className="font-semibold">
-                        JOD {item.price.toFixed(2)}
+                        {formatPrice(item.price, currency)}
                       </p>
                       <p className="text-sm text-muted-foreground">
-                        Total: JOD {(item.price * item.count).toFixed(2)}
+                        Total: {formatPrice(item.price * item.count, currency)}
                       </p>
                     </div>
                   </div>
@@ -226,29 +230,29 @@ function OrderDetailContent() {
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Subtotal</span>
                   <span>
-                    JOD{" "}
-                    {(
+                    {formatPrice(
                       order.total -
                       order.shipping +
-                      (order.discount || 0)
-                    ).toFixed(2)}
+                      (order.discount || 0),
+                      currency
+                    )}
                   </span>
                 </div>
                 {order.discount && order.discount > 0 && (
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Discount</span>
                     <span className="text-green-600">
-                      -JOD {order.discount.toFixed(2)}
+                      -{formatPrice(order.discount, currency)}
                     </span>
                   </div>
                 )}
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Shipping</span>
-                  <span>JOD {order.shipping.toFixed(2)}</span>
+                  <span>{formatPrice(order.shipping, currency)}</span>
                 </div>
                 <div className="flex justify-between text-lg font-bold border-t pt-2">
                   <span>Total</span>
-                  <span>JOD {order.total.toFixed(2)}</span>
+                  <span>{formatPrice(order.total, currency)}</span>
                 </div>
               </div>
             </div>

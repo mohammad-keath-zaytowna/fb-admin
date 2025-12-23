@@ -44,7 +44,9 @@ export default function SettingsPage() {
         } else {
             setCurrency("USD"); // Default if no user data
         }
-        setIsLoading(false);
+        setTimeout(() => {
+            setIsLoading(false);
+        }, 1000);
     }, []);
 
     const handleSave = async () => {

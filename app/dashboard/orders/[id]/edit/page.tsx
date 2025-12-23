@@ -4,6 +4,8 @@ import { getOrderById, updateOrder } from "@/lib/api/orders";
 import { getProducts } from "@/lib/api/products";
 import { useRouter, useParams } from "next/navigation";
 import { useState, useEffect, Suspense } from "react";
+import { useAuthContext } from "@/contexts/AuthContext";
+import { formatPrice, getUserCurrency } from "@/lib/utils/currency";
 import {
     Card,
     CardContent,
@@ -34,6 +36,8 @@ function OrderEditContent() {
     const [products, setProducts] = useState<Product[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
+    const { user } = useAuthContext();
+    const currency = getUserCurrency(user);
 
     // Form state
     const [userName, setUserName] = useState("");
@@ -273,7 +277,7 @@ function OrderEditContent() {
                                             <div>
                                                 <Label>Total</Label>
                                                 <div className="h-10 flex items-center font-semibold">
-                                                    JOD {(item.price * item.count).toFixed(2)}
+                                                    {formatPrice(item.price * item.count, currency)}
                                                 </div>
                                             </div>
                                         </div>
@@ -320,21 +324,21 @@ function OrderEditContent() {
                         <div className="mt-4 p-4 bg-muted rounded-lg space-y-2">
                             <div className="flex justify-between text-sm">
                                 <span className="text-muted-foreground">Subtotal</span>
-                                <span>JOD {subtotal.toFixed(2)}</span>
+                                <span>{formatPrice(subtotal, currency)}</span>
                             </div>
                             {discount > 0 && (
                                 <div className="flex justify-between text-sm">
                                     <span className="text-muted-foreground">Discount</span>
-                                    <span className="text-green-600">-JOD {discount.toFixed(2)}</span>
+                                    <span className="text-green-600">-{formatPrice(discount, currency)}</span>
                                 </div>
                             )}
                             <div className="flex justify-between text-sm">
                                 <span className="text-muted-foreground">Shipping</span>
-                                <span>JOD {shipping.toFixed(2)}</span>
+                                <span>{formatPrice(shipping, currency)}</span>
                             </div>
                             <div className="flex justify-between text-lg font-bold border-t pt-2">
                                 <span>Total</span>
-                                <span>JOD {total.toFixed(2)}</span>
+                                <span>{formatPrice(total, currency)}</span>
                             </div>
                         </div>
                     </div>
