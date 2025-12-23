@@ -52,7 +52,6 @@ function OrderDetailContent() {
     return () => document.removeEventListener("keydown", onKey);
   }, [modalImage]);
 
-
   const handlePrint = () => {
     window.print();
   };
@@ -168,23 +167,24 @@ function OrderDetailContent() {
                     className="flex items-center gap-4 p-4 border rounded-lg"
                   >
                     {product?.image && (
-                          <div
-                            className="w-20 h-20 relative rounded-md overflow-hidden bg-muted cursor-pointer"
-                            role="button"
-                            tabIndex={0}
-                            onClick={() => setModalImage(product.image)}
-                            onKeyDown={(e) => {
-                              if (e.key === "Enter") setModalImage(product.image);
-                            }}
-                          >
-                            <Image
-                              src={product.image}
-                              alt={product.name}
-                              fill
-                              className="object-cover"
-                              sizes="80px"
-                            />
-                          </div>
+                      <div
+                        className="w-20 h-20 relative rounded-md overflow-hidden bg-muted cursor-pointer"
+                        role="button"
+                        tabIndex={0}
+                        onClick={() => setModalImage(product?.image || null)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter")
+                            setModalImage(product.image || null);
+                        }}
+                      >
+                        <Image
+                          src={product.image}
+                          alt={product.name}
+                          fill
+                          className="object-cover"
+                          sizes="80px"
+                        />
+                      </div>
                     )}
                     <div className="flex-1">
                       <p className="font-medium">
@@ -197,7 +197,9 @@ function OrderDetailContent() {
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className="font-semibold">JOD {item.price.toFixed(2)}</p>
+                      <p className="font-semibold">
+                        JOD {item.price.toFixed(2)}
+                      </p>
                       <p className="text-sm text-muted-foreground">
                         Total: JOD {(item.price * item.count).toFixed(2)}
                       </p>
