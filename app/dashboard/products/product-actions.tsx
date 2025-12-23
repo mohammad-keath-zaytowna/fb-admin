@@ -18,21 +18,21 @@ interface ProductActionsProps {
 
 export function ProductActions({ product }: ProductActionsProps) {
   const router = useRouter();
-  
+
   const handleStatusChange = async (newStatus: "active" | "inactive" | "deleted") => {
     try {
       await updateProductStatus(product._id, newStatus);
-      router.refresh();
+      window.location.reload();;
     } catch (error) {
       console.error("Failed to update product status:", error);
     }
   };
-  
+
   const handleDelete = async () => {
     if (confirm("Are you sure you want to delete this product?")) {
       try {
         await deleteProduct(product._id);
-        router.refresh();
+        window.location.reload();;
       } catch (error) {
         console.error("Failed to delete product:", error);
       }

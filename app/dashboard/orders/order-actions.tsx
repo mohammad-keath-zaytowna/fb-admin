@@ -24,8 +24,7 @@ export function OrderActions({ order }: OrderActionsProps) {
   ) => {
     try {
       await updateOrderStatus(order._id, newStatus);
-      console.log("teste");
-      router.refresh();
+      window.location.reload();
     } catch (error) {
       console.error("Failed to update order status:", error);
     }

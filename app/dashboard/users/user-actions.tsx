@@ -34,21 +34,21 @@ export function UserActions({ user }: UserActionsProps) {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
+
   const handleStatusChange = async (newStatus: "active" | "blocked" | "deleted") => {
     try {
       await updateUserStatus(user._id, newStatus);
-      router.refresh();
+      window.location.reload();;
     } catch (error) {
       console.error("Failed to update user status:", error);
     }
   };
-  
+
   const handleDelete = async () => {
     if (confirm("Are you sure you want to delete this user?")) {
       try {
         await deleteUser(user._id);
-        router.refresh();
+        window.location.reload();;
       } catch (error) {
         console.error("Failed to delete user:", error);
       }
@@ -59,14 +59,14 @@ export function UserActions({ user }: UserActionsProps) {
     if (newPassword !== confirmPassword) {
       return;
     }
-    
+
     setIsSubmitting(true);
     try {
       await updateUserPassword(user._id, newPassword, confirmPassword);
       setIsPasswordDialogOpen(false);
       setNewPassword("");
       setConfirmPassword("");
-      router.refresh();
+      window.location.reload();;
     } catch (error) {
       console.error("Failed to update password:", error);
     } finally {
