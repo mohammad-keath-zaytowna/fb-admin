@@ -81,3 +81,32 @@ export const updateOrderStatus = async (
   }
 };
 
+export const updateOrder = async (
+  orderId: string,
+  orderData: {
+    items?: Array<{
+      prod_id: string;
+      count: number;
+      size?: string;
+      color?: string;
+      price: number;
+    }>;
+    userName?: string;
+    phoneNumber?: string;
+    address?: string;
+    shipping?: number;
+    discount?: number;
+    notes?: string;
+    status?: "pending" | "paid" | "shipped" | "completed" | "cancelled";
+  }
+): Promise<Order> => {
+  try {
+    const { data } = await apiClient.patch(`/orders/${orderId}`, orderData);
+    toast.success(data?.message || "Order updated successfully");
+    return data?.data?.order;
+  } catch (error: any) {
+    toast.error(error?.response?.data?.message || error?.message || "Failed to update order");
+    throw error;
+  }
+};
+

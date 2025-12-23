@@ -5,6 +5,7 @@ export type User = {
   role: "user" | "admin" | "superAdmin";
   status: "active" | "blocked" | "deleted";
   is_general_products?: boolean;
+  currency?: "USD" | "JOD" | "SP";
   createdAt?: string;
   updatedAt?: string;
   image?: string;

@@ -110,10 +110,19 @@ function OrderDetailContent() {
           <IconArrowLeft className="h-4 w-4" />
           Back
         </Button>
-        <Button onClick={handlePrint} className="gap-2">
-          <IconPrinter className="h-4 w-4" />
-          Print
-        </Button>
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            onClick={() => router.push(`/dashboard/orders/${orderId}/edit`)}
+            className="gap-2"
+          >
+            Edit Order
+          </Button>
+          <Button onClick={handlePrint} className="gap-2">
+            <IconPrinter className="h-4 w-4" />
+            Print
+          </Button>
+        </div>
       </div>
 
       <Card className="print-card print-show">
