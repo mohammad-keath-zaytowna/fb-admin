@@ -12,7 +12,9 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { updateCurrency } from "@/lib/api/currency";
+import { getCurrentUser } from "@/lib/api/auth";
 import { Loader2 } from "lucide-react";
+import { useAuthContext } from "@/contexts/AuthContext";
 
 const CURRENCIES = [
     { value: "USD", label: "US Dollar ($)", symbol: "$" },
@@ -24,29 +26,28 @@ export default function SettingsPage() {
     const [currency, setCurrency] = useState<string>("");
     const [isLoading, setIsLoading] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
+    const { updateUser } = useAuthContext();
 
     useEffect(() => {
-        // Get current user from localStorage or context
-        setIsLoading(true);
-        const storedUser = localStorage.getItem("user");
-        if (storedUser) {
+        // Fetch current user from backend
+        const fetchUserData = async () => {
+            setIsLoading(true);
             try {
-                const user = JSON.parse(storedUser);
-                if (user.currency) {
+                const user = await getCurrentUser();
+                if (user?.currency) {
                     setCurrency(user.currency);
                 } else {
-                    setCurrency("USD"); // Default if no currency set
+                    setCurrency("JOD"); // Default if no currency set
                 }
             } catch (error) {
-                console.error("Failed to parse user data:", error);
-                setCurrency("USD"); // Default on error
+                console.error("Failed to fetch user data:", error);
+                setCurrency("JOD"); // Default on error
+            } finally {
+                setIsLoading(false);
             }
-        } else {
-            setCurrency("USD"); // Default if no user data
-        }
-        setTimeout(() => {
-            setIsLoading(false);
-        }, 1000);
+        };
+
+        fetchUserData();
     }, []);
 
     const handleSave = async () => {
@@ -54,12 +55,9 @@ export default function SettingsPage() {
         try {
             const updatedUser = await updateCurrency(currency as 'USD' | 'JOD' | 'SP');
 
-            // Update localStorage with new currency
-            const storedUser = localStorage.getItem("user");
-            if (storedUser) {
-                const user = JSON.parse(storedUser);
-                user.currency = currency;
-                localStorage.setItem("user", JSON.stringify(user));
+            // Update AuthContext with fresh user data
+            if (updatedUser) {
+                await updateUser(updatedUser);
             }
 
         } catch (error) {

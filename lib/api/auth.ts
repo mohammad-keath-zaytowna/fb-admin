@@ -31,3 +31,17 @@ export const loginApiMethod = async ({
     );
   }
 };
+
+export const getCurrentUser = async () => {
+  try {
+    const { data } = await apiClient.get("/auth/me");
+    return data?.data?.user;
+    // eslint-disable-next-line
+  } catch (error: any) {
+    toast.error(
+      error?.response?.data?.message || error?.message || "Failed to fetch user data"
+    );
+    throw error;
+  }
+};
+
