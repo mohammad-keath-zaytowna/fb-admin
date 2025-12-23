@@ -10,9 +10,7 @@ function DashboardLayout({
   children: React.ReactNode;
 }>) {
   return (
-    // <AuthGuard>
-
-
+    <AuthGuard>
       <SidebarProvider
         style={
           {
@@ -27,7 +25,7 @@ function DashboardLayout({
           <>{children}</>
         </SidebarInset>
       </SidebarProvider>
-    // </AuthGuard>
+    </AuthGuard>
   );
 }
 

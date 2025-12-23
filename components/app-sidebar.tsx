@@ -64,6 +64,17 @@ const data = {
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   const { user } = useAuthContext()
+
+  // Add Admin Management for superAdmins
+  const navItems = [...data.navMain];
+  if (user?.role === "superAdmin") {
+    navItems.push({
+      title: "Admin Management",
+      url: "/dashboard/admin-management",
+      icon: IconUsers,
+    });
+  }
+
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
@@ -87,7 +98,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
+        <NavMain items={navItems} />
         <NavMain items={data.navSecondary} />
       </SidebarContent>
       <SidebarFooter>

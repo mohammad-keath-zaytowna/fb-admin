@@ -22,22 +22,29 @@ const CURRENCIES = [
 
 export default function SettingsPage() {
     const [currency, setCurrency] = useState<string>("");
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
 
     useEffect(() => {
         // Get current user from localStorage or context
+        setIsLoading(true);
         const storedUser = localStorage.getItem("user");
         if (storedUser) {
             try {
                 const user = JSON.parse(storedUser);
                 if (user.currency) {
                     setCurrency(user.currency);
+                } else {
+                    setCurrency("USD"); // Default if no currency set
                 }
             } catch (error) {
                 console.error("Failed to parse user data:", error);
+                setCurrency("USD"); // Default on error
             }
+        } else {
+            setCurrency("USD"); // Default if no user data
         }
+        setIsLoading(false);
     }, []);
 
     const handleSave = async () => {
@@ -81,45 +88,53 @@ export default function SettingsPage() {
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
-                        <div className="space-y-2">
-                            <Label htmlFor="currency">Currency</Label>
-                            <Select value={currency} onValueChange={setCurrency}>
-                                <SelectTrigger id="currency">
-                                    <SelectValue placeholder="Select currency" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    {CURRENCIES.map((curr) => (
-                                        <SelectItem key={curr.value} value={curr.value}>
-                                            {curr.label}
-                                        </SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
-                        </div>
-
-                        {selectedCurrency && (
-                            <div className="rounded-lg bg-muted p-4">
-                                <p className="text-sm font-medium">Preview</p>
-                                <p className="text-2xl font-bold mt-2">
-                                    {selectedCurrency.symbol === "$"
-                                        ? `${selectedCurrency.symbol}1,234.56`
-                                        : `${selectedCurrency.symbol} 1,234.56`
-                                    }
-                                </p>
-                                <p className="text-xs text-muted-foreground mt-1">
-                                    Example price display
-                                </p>
+                        {isLoading ? (
+                            <div className="flex items-center justify-center py-8">
+                                <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
                             </div>
-                        )}
+                        ) : (
+                            <>
+                                <div className="space-y-2">
+                                    <Label htmlFor="currency">Currency</Label>
+                                    <Select value={currency} onValueChange={setCurrency}>
+                                        <SelectTrigger id="currency">
+                                            <SelectValue placeholder="Select currency" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {CURRENCIES.map((curr) => (
+                                                <SelectItem key={curr.value} value={curr.value}>
+                                                    {curr.label}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                </div>
 
-                        <Button
-                            onClick={handleSave}
-                            disabled={isSaving}
-                            className="w-full sm:w-auto"
-                        >
-                            {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                            {isSaving ? "Saving..." : "Save Changes"}
-                        </Button>
+                                {selectedCurrency && (
+                                    <div className="rounded-lg bg-muted p-4">
+                                        <p className="text-sm font-medium">Preview</p>
+                                        <p className="text-2xl font-bold mt-2">
+                                            {selectedCurrency.symbol === "$"
+                                                ? `${selectedCurrency.symbol}1,234.56`
+                                                : `${selectedCurrency.symbol} 1,234.56`
+                                            }
+                                        </p>
+                                        <p className="text-xs text-muted-foreground mt-1">
+                                            Example price display
+                                        </p>
+                                    </div>
+                                )}
+
+                                <Button
+                                    onClick={handleSave}
+                                    disabled={isSaving}
+                                    className="w-full sm:w-auto"
+                                >
+                                    {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                                    {isSaving ? "Saving..." : "Save Changes"}
+                                </Button>
+                            </>
+                        )}
                     </CardContent>
                 </Card>
 

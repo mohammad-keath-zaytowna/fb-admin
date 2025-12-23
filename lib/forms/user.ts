@@ -4,13 +4,13 @@ export const userFormSchema = z
   .object({
     name: z.string().min(1, "Name is required"),
     email: z.string().email("Must be a valid email"),
-    password: z.string().min(6, "Password must be at least 6 characters").optional(),
-    confirmPassword: z.string().optional(),
+    password: z.string().optional().or(z.literal("")),
+    confirmPassword: z.string().optional().or(z.literal("")),
     is_general_products: z.boolean().optional(),
   })
   .refine(
     (data) => {
-      // If password is provided, confirmPassword must match
+      // If password is provided and not empty, confirmPassword must match
       if (data.password && data.password.length > 0) {
         return data.password === data.confirmPassword;
       }
@@ -19,6 +19,19 @@ export const userFormSchema = z
     {
       message: "Passwords do not match",
       path: ["confirmPassword"],
+    }
+  )
+  .refine(
+    (data) => {
+      // If password is provided and not empty, it must be at least 6 characters
+      if (data.password && data.password.length > 0) {
+        return data.password.length >= 6;
+      }
+      return true;
+    },
+    {
+      message: "Password must be at least 6 characters",
+      path: ["password"],
     }
   );
 

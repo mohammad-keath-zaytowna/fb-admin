@@ -38,7 +38,20 @@ function EditUserContent() {
   const handleSubmit = async (_data: UserFormData) => {
     try {
       setIsLoading(true);
-      await updateUser(userId, _data as any);
+
+      // Remove empty password fields
+      const updateData: any = {
+        name: _data.name,
+        is_general_products: _data.is_general_products,
+      };
+
+      // Only include password if it's not empty
+      if (_data.password && _data.password.length > 0) {
+        updateData.password = _data.password;
+        updateData.confirmPassword = _data.confirmPassword;
+      }
+
+      await updateUser(userId, updateData);
       router.push("/dashboard/users");
     } catch (error) {
       console.error("Failed to update user:", error);
