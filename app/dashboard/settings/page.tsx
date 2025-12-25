@@ -57,7 +57,7 @@ export default function SettingsPage() {
 
             // Update AuthContext with fresh user data
             if (updatedUser) {
-                await updateUser(updatedUser);
+                await updateUser(updatedUser?.user);
             }
 
         } catch (error) {

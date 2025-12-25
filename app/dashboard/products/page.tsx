@@ -1,6 +1,6 @@
 "use client";
 
-import { columnsWithEdit as columns } from "./columns";
+import { useProductColumns } from "./columns";
 import { ProductsDataTable } from "./products-data-table";
 import { getProducts, GetProductsParams } from "@/lib/api/products";
 import { Product, ProductListResponse } from "@/types";
@@ -17,6 +17,7 @@ function ProductsPageContent() {
   const [rowsPerPage, setRowsPerPage] = useState(Number(searchParams.get("rowsPerPage")) || 10);
   const [search, setSearch] = useState(searchParams.get("search") || "");
   const [searchDebounced] = useDebounce(search, 200);
+  const columns = useProductColumns()
 
   const fetchProducts = useCallback(async (params?: GetProductsParams) => {
     try {

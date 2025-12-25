@@ -1,6 +1,6 @@
 "use client";
 
-import { columns } from "./columns";
+import { useOrderColumns } from "./columns";
 import { OrdersDataTable } from "./orders-data-table";
 import { getOrders, GetOrdersParams } from "@/lib/api/orders";
 import { Order, OrderListResponse } from "@/types";
@@ -17,6 +17,8 @@ function OrdersPageContent() {
   const [rowsPerPage, setRowsPerPage] = useState(Number(searchParams.get("rowsPerPage")) || 10);
   const [search, setSearch] = useState(searchParams.get("search") || "");
   const [searchDebounced] = useDebounce(search, 200);
+
+  const columns = useOrderColumns()
 
   const fetchOrders = useCallback(async (params?: GetOrdersParams) => {
     try {
