@@ -42,7 +42,6 @@ function EditUserContent() {
       // Remove empty password fields
       const updateData: any = {
         name: _data.name,
-        is_general_products: _data.is_general_products,
       };
 
       // Only include password if it's not empty

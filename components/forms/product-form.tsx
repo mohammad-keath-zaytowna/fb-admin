@@ -8,10 +8,13 @@ import RHFTextarea from "../react-hook-form/rhf-textarea";
 import RHFImageUpload from "../react-hook-form/rhf-image-upload";
 import { Button } from "../ui/button";
 import { Product } from "@/types";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Input } from "../ui/input";
 import { Field, FieldLabel } from "../ui/field";
 import { IconPlus, IconX } from "@tabler/icons-react";
+import { Checkbox } from "../ui/checkbox";
+import { Label } from "../ui/label";
+import { getUsers } from "@/lib/api/users";
 
 interface ProductFormProps {
   initialData?: Product;
@@ -24,6 +27,9 @@ export function ProductForm({ initialData, onSubmit, isLoading = false }: Produc
   const [sizes, setSizes] = useState<string[]>(initialData?.sizes || []);
   const [newColor, setNewColor] = useState("");
   const [newSize, setNewSize] = useState("");
+  const [selectedUsers, setSelectedUsers] = useState<string[]>(initialData?.visibleToUsers || []);
+  const [allUsers, setAllUsers] = useState<boolean>(!initialData?.visibleToUsers || initialData?.visibleToUsers.length === 0);
+  const [users, setUsers] = useState<any[]>([]);
 
   const form = useForm<ProductFormData>({
     resolver: zodResolver(productFormSchema),
@@ -39,11 +45,25 @@ export function ProductForm({ initialData, onSubmit, isLoading = false }: Produc
     mode: "onChange",
   });
 
+  // Fetch users on component mount
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await getUsers({ rowsPerPage: 20 });
+        setUsers(response.users || []);
+      } catch (error) {
+        console.error("Failed to fetch users:", error);
+      }
+    };
+    fetchUsers();
+  }, []);
+
   const handleSubmit = async (data: ProductFormData) => {
     await onSubmit({
       ...data,
       colors: colors.filter((c) => c.trim() !== ""),
       sizes: sizes.filter((s) => s.trim() !== ""),
+      visibleToUsers: allUsers ? [] : selectedUsers,
     });
   };
 
@@ -67,6 +87,21 @@ export function ProductForm({ initialData, onSubmit, isLoading = false }: Produc
 
   const removeSize = (size: string) => {
     setSizes(sizes.filter((s) => s !== size));
+  };
+
+  const toggleUserSelection = (userId: string) => {
+    if (selectedUsers.includes(userId)) {
+      setSelectedUsers(selectedUsers.filter(id => id !== userId));
+    } else {
+      setSelectedUsers([...selectedUsers, userId]);
+    }
+  };
+
+  const handleAllUsersChange = (checked: boolean) => {
+    setAllUsers(checked);
+    if (checked) {
+      setSelectedUsers([]);
+    }
   };
 
   return (
@@ -106,7 +141,7 @@ export function ProductForm({ initialData, onSubmit, isLoading = false }: Produc
           rows={4}
           disabled={isLoading}
         />
-        
+
         <Field>
           <FieldLabel>Colors</FieldLabel>
           <div className="flex gap-2">
@@ -128,24 +163,24 @@ export function ProductForm({ initialData, onSubmit, isLoading = false }: Produc
           {colors.length > 0 && (
             <div className="flex flex-wrap gap-2 mt-2">
               {colors.map((color) => (
-                    <div
-                      key={color}
-                      className="flex items-center gap-2 px-2 py-1 bg-muted rounded-md"
-                    >
-                      <div
-                        aria-hidden
-                        style={{ backgroundColor: color }}
-                        className="w-3 h-3 rounded-sm border border-input"
-                      />
-                      <span>{color}</span>
-                      <button
-                        type="button"
-                        onClick={() => removeColor(color)}
-                        className="text-destructive hover:text-destructive/80"
-                      >
-                        <IconX className="h-3 w-3" />
-                      </button>
-                    </div>
+                <div
+                  key={color}
+                  className="flex items-center gap-2 px-2 py-1 bg-muted rounded-md"
+                >
+                  <div
+                    aria-hidden
+                    style={{ backgroundColor: color }}
+                    className="w-3 h-3 rounded-sm border border-input"
+                  />
+                  <span>{color}</span>
+                  <button
+                    type="button"
+                    onClick={() => removeColor(color)}
+                    className="text-destructive hover:text-destructive/80"
+                  >
+                    <IconX className="h-3 w-3" />
+                  </button>
+                </div>
               ))}
             </div>
           )}
@@ -188,6 +223,52 @@ export function ProductForm({ initialData, onSubmit, isLoading = false }: Produc
               ))}
             </div>
           )}
+        </Field>
+
+        <Field>
+          <FieldLabel>Visible To Users</FieldLabel>
+          <div className="space-y-3">
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="allUsers"
+                checked={allUsers}
+                onCheckedChange={handleAllUsersChange}
+                disabled={isLoading}
+              />
+              <Label htmlFor="allUsers" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                All Users (visible to everyone)
+              </Label>
+            </div>
+            {!allUsers && (
+              <div className="space-y-2 p-3 border rounded-md max-h-48 overflow-y-auto">
+                {users.length === 0 ? (
+                  <p className="text-sm text-muted-foreground">No users available</p>
+                ) : (
+                  users.map((user) => (
+                    <div key={user._id} className="flex items-center space-x-2">
+                      <Checkbox
+                        id={`user-${user._id}`}
+                        checked={selectedUsers.includes(user._id)}
+                        onCheckedChange={() => toggleUserSelection(user._id)}
+                        disabled={isLoading}
+                      />
+                      <Label
+                        htmlFor={`user-${user._id}`}
+                        className="text-sm font-normal leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      >
+                        {user.name} ({user.email})
+                      </Label>
+                    </div>
+                  ))
+                )}
+              </div>
+            )}
+            {!allUsers && selectedUsers.length > 0 && (
+              <p className="text-sm text-muted-foreground">
+                Selected {selectedUsers.length} user{selectedUsers.length > 1 ? 's' : ''}
+              </p>
+            )}
+          </div>
         </Field>
 
         <Button

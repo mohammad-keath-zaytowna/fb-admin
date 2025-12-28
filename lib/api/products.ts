@@ -1,4 +1,4 @@
-import apiClient from "./config";
+import apiClient, { API_BASE_URL } from "./config";
 import { Product, ProductListResponse } from "@/types";
 import { toast } from "sonner";
 
@@ -75,6 +75,7 @@ export const createProduct = async (productData: {
   description?: string;
   colors?: string[];
   sizes?: string[];
+  visibleToUsers?: string[];
 }): Promise<Product> => {
   try {
     const isFile = (productData.image as any) instanceof File;
@@ -95,12 +96,27 @@ export const createProduct = async (productData: {
       if (productData.sizes && productData.sizes.length > 0) {
         formData.append("sizes", JSON.stringify(productData.sizes));
       }
+      if (productData.visibleToUsers !== undefined) {
+        formData.append("visibleToUsers", JSON.stringify(productData.visibleToUsers));
+      }
 
-      const { data } = await apiClient.post("/products", formData, {
+      // Use fetch instead of axios for better FormData handling
+      const token = localStorage.getItem("@auth_token");
+      const response = await fetch(`${API_BASE_URL}/products`, {
+        method: 'POST',
         headers: {
-          "Content-Type": "multipart/form-data",
+          'Authorization': token ? `Bearer ${token}` : '',
+          // Don't set Content-Type - let fetch set it with proper boundary
         },
+        body: formData,
       });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to create product');
+      }
+
+      const data = await response.json();
       toast.success(data?.message || "Product created successfully");
       return data?.data?.product;
     } else {
@@ -144,6 +160,9 @@ export const updateProduct = async (
       }
       if (productData.sizes && productData.sizes.length > 0) {
         formData.append("sizes", JSON.stringify(productData.sizes));
+      }
+      if (productData.visibleToUsers !== undefined) {
+        formData.append("visibleToUsers", JSON.stringify(productData.visibleToUsers));
       }
 
       const { data } = await apiClient.patch(

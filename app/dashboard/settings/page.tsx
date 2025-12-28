@@ -15,6 +15,7 @@ import { updateCurrency } from "@/lib/api/currency";
 import { getCurrentUser } from "@/lib/api/auth";
 import { Loader2 } from "lucide-react";
 import { useAuthContext } from "@/contexts/AuthContext";
+import { UserPermissions } from "@/components/settings/user-permissions";
 
 const CURRENCIES = [
     { value: "USD", label: "US Dollar ($)", symbol: "$" },
@@ -135,6 +136,19 @@ export default function SettingsPage() {
                                 </Button>
                             </>
                         )}
+                    </CardContent>
+                </Card>
+
+                {/* User Permissions Management */}
+                <Card>
+                    <CardHeader>
+                        <CardTitle>User Permissions</CardTitle>
+                        <CardDescription>
+                            Manage which users can see all orders from your managed users
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <UserPermissions />
                     </CardContent>
                 </Card>
 

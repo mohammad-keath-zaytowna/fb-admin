@@ -26,7 +26,6 @@ export function UserForm({
       email: initialData?.email || "",
       password: "",
       confirmPassword: "",
-      is_general_products: initialData?.is_general_products ?? true,
     },
     mode: "onChange",
   });
@@ -76,21 +75,6 @@ export function UserForm({
           <p className="text-sm text-muted-foreground">
             Leave password fields empty to keep current password
           </p>
-        )}
-        {initialData && initialData.role === "admin" && (
-          <div className="mt-2">
-            <label className="flex items-center gap-3">
-              <Checkbox
-                defaultChecked={initialData.is_general_products}
-                onCheckedChange={(val) =>
-                  form.setValue("is_general_products" as any, val as any)
-                }
-              />
-              <span className="text-sm">
-                General Products (users see admin products)
-              </span>
-            </label>
-          </div>
         )}
         <Button
           type="submit"

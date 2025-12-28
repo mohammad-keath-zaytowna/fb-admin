@@ -13,6 +13,7 @@ export const productFormSchema = z.object({
   description: z.string().optional(),
   colors: z.array(z.string()).optional(),
   sizes: z.array(z.string()).optional(),
+  visibleToUsers: z.array(z.string()).optional(),
 });
 
 export type ProductFormData = z.infer<typeof productFormSchema>;

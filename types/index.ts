@@ -4,12 +4,12 @@ export type User = {
   email: string;
   role: "user" | "admin" | "superAdmin";
   status: "active" | "blocked" | "deleted";
-  is_general_products?: boolean;
   currency?: "USD" | "JOD" | "SP";
   createdAt?: string;
   updatedAt?: string;
   image?: string;
   maxManagedUsers?: number;
+  canSeeAllOrders?: boolean;
 };
 
 export type AuthState = {
@@ -40,6 +40,7 @@ export type Product = {
   status: "active" | "inactive" | "deleted";
   createdAt?: string;
   updatedAt?: string;
+  visibleToUsers?: string[];
 };
 
 export type ProductListResponse = {
