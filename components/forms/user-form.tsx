@@ -7,6 +7,7 @@ import RHFInput from "../react-hook-form/rhf-input";
 import { Button } from "../ui/button";
 import { User } from "@/types";
 import { Checkbox } from "../ui/checkbox";
+import { useAuthContext } from "@/contexts/AuthContext";
 
 interface UserFormProps {
   initialData?: User;
@@ -24,14 +25,18 @@ export function UserForm({
     defaultValues: {
       name: initialData?.name || "",
       email: initialData?.email || "",
+      maxManagedUsers: initialData?.maxManagedUsers || undefined,
       password: "",
       confirmPassword: "",
     },
     mode: "onChange",
   });
 
+  const { user } = useAuthContext()
+
   const handleSubmit = async (data: UserFormData) => {
     console.log("submitting...");
+    console.log('data', data)
     await onSubmit(data);
   };
 
@@ -52,6 +57,16 @@ export function UserForm({
           placeholder="john@example.com"
           disabled={isLoading || !!initialData}
         />
+
+        {user?.role === 'superAdmin' &&
+          <RHFInput
+            name="maxManagedUsers"
+            label="Max managing users"
+            type="number"
+            placeholder="0"
+            disabled={isLoading}
+          />
+        }
 
         {!initialData && (
           <>
@@ -85,8 +100,8 @@ export function UserForm({
           {isLoading
             ? "Saving..."
             : initialData
-            ? "Update User"
-            : "Create User"}
+              ? "Update User"
+              : "Create User"}
         </Button>
       </form>
     </FormProvider>

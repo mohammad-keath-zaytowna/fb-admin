@@ -23,21 +23,33 @@ function RHFInput({
     <Controller
       name={name}
       control={control}
-      render={({ field, fieldState }) => (
-        <Field data-invalid={fieldState.invalid}>
-          <FieldLabel htmlFor={name}>{label}</FieldLabel>
-          <Input
-            {...field}
-            disabled={disabled}
-            id={name}
-            type={type}
-            placeholder={placeholder}
-            aria-invalid={fieldState.invalid}
-          />
+      render={({ field, fieldState }) => {
+        const value = type === "number" && field.value === undefined ? "" : field.value;
+        const onChange = type === "number"
+          ? (e: React.ChangeEvent<HTMLInputElement>) => {
+            const val = e.target.value;
+            field.onChange(val === "" ? undefined : Number(val));
+          }
+          : field.onChange;
 
-          {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-        </Field>
-      )}
+        return (
+          <Field data-invalid={fieldState.invalid}>
+            <FieldLabel htmlFor={name}>{label}</FieldLabel>
+            <Input
+              {...field}
+              value={value}
+              onChange={onChange}
+              disabled={disabled}
+              id={name}
+              type={type}
+              placeholder={placeholder}
+              aria-invalid={fieldState.invalid}
+            />
+
+            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+          </Field>
+        );
+      }}
     />
   );
 }

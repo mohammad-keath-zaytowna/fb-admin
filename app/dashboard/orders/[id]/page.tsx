@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { IconPrinter, IconArrowLeft } from "@tabler/icons-react";
 import Image from "next/image";
+import { getImageUrl } from "@/lib/utils/image";
 
 function OrderDetailContent() {
   const router = useRouter();
@@ -191,7 +192,7 @@ function OrderDetailContent() {
                         }}
                       >
                         <Image
-                          src={product.image}
+                          src={getImageUrl(product.image)}
                           alt={product.name}
                           fill
                           className="object-cover"
@@ -286,7 +287,7 @@ function OrderDetailContent() {
             </button>
             <div className="w-full h-full flex items-center justify-center">
               <Image
-                src={modalImage}
+                src={getImageUrl(modalImage)}
                 alt="Preview"
                 width={1200}
                 height={800}

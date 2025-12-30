@@ -6,6 +6,7 @@ export const userFormSchema = z
     email: z.string().email("Must be a valid email"),
     password: z.string().optional().or(z.literal("")),
     confirmPassword: z.string().optional().or(z.literal("")),
+    maxManagedUsers: z.number().int().positive().optional(),
   })
   .refine(
     (data) => {
