@@ -154,10 +154,6 @@ function OrderDetailContent() {
                 <p className="font-medium">{order.userName}</p>
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">Email</p>
-                <p className="font-medium">{currUser?.email || "N/A"}</p>
-              </div>
-              <div>
                 <p className="text-sm text-muted-foreground">Phone</p>
                 <p className="font-medium">{order.phoneNumber}</p>
               </div>
