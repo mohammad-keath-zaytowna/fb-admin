@@ -38,6 +38,9 @@ function EditProductContent() {
   const handleSubmit = async (data: ProductFormData) => {
     try {
       setIsLoading(true);
+      console.log('=== PAGE SUBMIT ===');
+      console.log('data.stock:', data.stock, 'Type:', typeof data.stock);
+
       await updateProduct(productId, {
         name: data.name,
         image: data.image,
@@ -46,6 +49,7 @@ function EditProductContent() {
         description: data.description,
         colors: data.colors,
         sizes: data.sizes,
+        stock: data.stock,
       });
       router.push("/dashboard/products");
     } catch (error) {

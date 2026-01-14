@@ -26,6 +26,7 @@ export function UserForm({
       name: initialData?.name || "",
       email: initialData?.email || "",
       maxManagedUsers: initialData?.maxManagedUsers || undefined,
+      stockManagement: initialData?.stockManagement || false,
       password: "",
       confirmPassword: "",
     },
@@ -59,13 +60,33 @@ export function UserForm({
         />
 
         {user?.role === 'superAdmin' &&
-          <RHFInput
-            name="maxManagedUsers"
-            label="Max managing users"
-            type="number"
-            placeholder="0"
-            disabled={isLoading}
-          />
+          <>
+            <RHFInput
+              name="maxManagedUsers"
+              label="Max managing users"
+              type="number"
+              placeholder="0"
+              disabled={isLoading}
+            />
+
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="stockManagement"
+                checked={!!form.watch("stockManagement")}
+                onCheckedChange={(checked) => form.setValue("stockManagement", !!checked)}
+                disabled={isLoading}
+              />
+              <label
+                htmlFor="stockManagement"
+                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              >
+                Enable Stock Management
+              </label>
+            </div>
+            <p className="text-sm text-muted-foreground mt-1">
+              When enabled, this admin can track product stock and prevent negative inventory.
+            </p>
+          </>
         }
 
         {!initialData && (

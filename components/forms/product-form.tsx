@@ -37,8 +37,9 @@ export function ProductForm({ initialData, onSubmit, isLoading = false }: Produc
       name: initialData?.name || "",
       image: initialData?.image || "",
       category: initialData?.category || "",
-      price: initialData?.price || '',
+      price: String(initialData?.price) || '',
       description: initialData?.description || "",
+      stock: initialData?.stock || 0,
       colors: initialData?.colors || [],
       sizes: initialData?.sizes || [],
     },
@@ -59,12 +60,20 @@ export function ProductForm({ initialData, onSubmit, isLoading = false }: Produc
   }, []);
 
   const handleSubmit = async (data: ProductFormData) => {
-    await onSubmit({
+    console.log('=== FORM SUBMIT - RAW DATA ===');
+    console.log('data.stock:', data.stock, 'Type:', typeof data.stock);
+
+    const submissionData = {
       ...data,
       colors: colors.filter((c) => c.trim() !== ""),
       sizes: sizes.filter((s) => s.trim() !== ""),
       visibleToUsers: allUsers ? [] : selectedUsers,
-    });
+    };
+
+    console.log('=== FORM SUBMIT - AFTER PROCESSING ===');
+    console.log('submissionData.stock:', submissionData.stock, 'Type:', typeof submissionData.stock);
+
+    await onSubmit(submissionData);
   };
 
   const addColor = () => {
@@ -132,6 +141,13 @@ export function ProductForm({ initialData, onSubmit, isLoading = false }: Produc
           label="Price"
           type="text"
           placeholder="99.99"
+          disabled={isLoading}
+        />
+        <RHFInput
+          name="stock"
+          label="Stock Quantity"
+          type="text"
+          placeholder="0"
           disabled={isLoading}
         />
         <RHFTextarea

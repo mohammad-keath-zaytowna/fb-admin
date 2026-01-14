@@ -7,6 +7,7 @@ export const userFormSchema = z
     password: z.string().optional().or(z.literal("")),
     confirmPassword: z.string().optional().or(z.literal("")),
     maxManagedUsers: z.number().int().positive().optional(),
+    stockManagement: z.boolean().optional(),
   })
   .refine(
     (data) => {

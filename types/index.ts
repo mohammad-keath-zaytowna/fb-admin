@@ -5,6 +5,7 @@ export type User = {
   role: "user" | "admin" | "superAdmin";
   status: "active" | "blocked" | "deleted";
   currency?: "USD" | "JOD" | "SP";
+  stockManagement?: boolean;
   createdAt?: string;
   updatedAt?: string;
   image?: string;
@@ -35,12 +36,17 @@ export type Product = {
   category: string;
   price: string;
   description?: string;
+  stock?: number;
   colors?: string[];
   sizes?: string[];
   status: "active" | "inactive" | "deleted";
   createdAt?: string;
   updatedAt?: string;
   visibleToUsers?: string[];
+  admin?: {
+    _id: string;
+    stockManagement?: boolean;
+  };
 };
 
 export type ProductListResponse = {

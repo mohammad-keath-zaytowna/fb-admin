@@ -11,6 +11,7 @@ export const productFormSchema = z.object({
   category: z.string().min(1, "Category is required"),
   price: z.string().min(1, "Price is required"),
   description: z.string().optional(),
+  stock: z.coerce.number().int().min(0, "Stock cannot be negative").optional(),
   colors: z.array(z.string()).optional(),
   sizes: z.array(z.string()).optional(),
   visibleToUsers: z.array(z.string()).optional(),

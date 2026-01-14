@@ -76,6 +76,7 @@ export const createProduct = async (productData: {
   colors?: string[];
   sizes?: string[];
   visibleToUsers?: string[];
+  stock?: number;
 }): Promise<Product> => {
   try {
     const isFile = (productData.image as any) instanceof File;
@@ -89,6 +90,9 @@ export const createProduct = async (productData: {
       formData.append("price", productData.price);
       if (productData.description) {
         formData.append("description", productData.description);
+      }
+      if (productData.stock !== undefined) {
+        formData.append("stock", productData.stock.toString());
       }
       if (productData.colors && productData.colors.length > 0) {
         formData.append("colors", JSON.stringify(productData.colors));
@@ -141,7 +145,6 @@ export const updateProduct = async (
 ): Promise<Product> => {
   try {
     const isFile = (productData.image as any) instanceof File;
-
     if (isFile) {
       // Send as FormData for file upload
       const formData = new FormData();
@@ -151,6 +154,12 @@ export const updateProduct = async (
         formData.append("category", productData.category);
       if (productData.price !== undefined) {
         formData.append("price", productData.price);
+      }
+      if (productData.stock !== undefined) {
+        console.log('=== API updateProduct - Adding stock to FormData ===');
+        console.log('productData.stock:', productData.stock, 'Type:', typeof productData.stock);
+        formData.append("stock", productData.stock.toString());
+        console.log('formData stock value:', formData.get("stock"));
       }
       if (productData.description !== undefined) {
         formData.append("description", productData.description);

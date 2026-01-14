@@ -29,6 +29,7 @@ export default function NewProductPage() {
         colors: data.colors,
         sizes: data.sizes,
         visibleToUsers: data.visibleToUsers,
+        stock: data.stock,
       });
       router.push("/dashboard/products");
     } catch (error) {
