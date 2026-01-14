@@ -146,7 +146,7 @@ export function ProductForm({ initialData, onSubmit, isLoading = false }: Produc
         <RHFInput
           name="stock"
           label="Stock Quantity"
-          type="text"
+          type="number"
           placeholder="0"
           disabled={isLoading}
         />

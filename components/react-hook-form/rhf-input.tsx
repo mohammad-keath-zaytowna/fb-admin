@@ -28,7 +28,7 @@ function RHFInput({
         const onChange = type === "number"
           ? (e: React.ChangeEvent<HTMLInputElement>) => {
             const val = e.target.value;
-            field.onChange(val === "" ? undefined : Number(val));
+            field.onChange(val === "" ? 0 : Number(val));
           }
           : field.onChange;
 
