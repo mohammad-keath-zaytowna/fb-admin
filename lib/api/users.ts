@@ -107,6 +107,7 @@ export const updateUserPassword = async (
 
 export const updateUser = async (userId: string, updateData: Partial<User>): Promise<User> => {
   try {
+   
     const { data } = await apiClient.patch(`/users/${userId}`, updateData);
     toast.success(data?.message || 'User updated successfully');
     return data?.data?.user;

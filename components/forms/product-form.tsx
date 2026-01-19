@@ -60,8 +60,7 @@ export function ProductForm({ initialData, onSubmit, isLoading = false }: Produc
   }, []);
 
   const handleSubmit = async (data: ProductFormData) => {
-    console.log('=== FORM SUBMIT - RAW DATA ===');
-    console.log('data.stock:', data.stock, 'Type:', typeof data.stock);
+  
 
     const submissionData = {
       ...data,
@@ -70,8 +69,7 @@ export function ProductForm({ initialData, onSubmit, isLoading = false }: Produc
       visibleToUsers: allUsers ? [] : selectedUsers,
     };
 
-    console.log('=== FORM SUBMIT - AFTER PROCESSING ===');
-    console.log('submissionData.stock:', submissionData.stock, 'Type:', typeof submissionData.stock);
+ 
 
     await onSubmit(submissionData);
   };

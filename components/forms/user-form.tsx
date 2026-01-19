@@ -36,8 +36,7 @@ export function UserForm({
   const { user } = useAuthContext()
 
   const handleSubmit = async (data: UserFormData) => {
-    console.log("submitting...");
-    console.log('data', data)
+   
     await onSubmit(data);
   };
 

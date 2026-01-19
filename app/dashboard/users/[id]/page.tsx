@@ -51,6 +51,9 @@ function EditUserContent() {
       if (_data.maxManagedUsers) {
         updateData.maxManagedUsers = _data.maxManagedUsers
       }
+      if (user?.role === 'admin') {
+        updateData.stockManagement = _data.stockManagement
+      }
 
       await updateUser(userId, updateData);
       router.push("/dashboard/users");

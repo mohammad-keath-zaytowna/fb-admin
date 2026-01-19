@@ -38,8 +38,7 @@ function EditProductContent() {
   const handleSubmit = async (data: ProductFormData) => {
     try {
       setIsLoading(true);
-      console.log('=== PAGE SUBMIT ===');
-      console.log('data.stock:', data.stock, 'Type:', typeof data.stock);
+    
 
       await updateProduct(productId, {
         name: data.name,

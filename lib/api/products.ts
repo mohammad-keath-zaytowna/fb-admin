@@ -156,10 +156,9 @@ export const updateProduct = async (
         formData.append("price", productData.price);
       }
       if (productData.stock !== undefined) {
-        console.log('=== API updateProduct - Adding stock to FormData ===');
-        console.log('productData.stock:', productData.stock, 'Type:', typeof productData.stock);
+        
         formData.append("stock", productData.stock.toString());
-        console.log('formData stock value:', formData.get("stock"));
+      
       }
       if (productData.description !== undefined) {
         formData.append("description", productData.description);
